@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>miu.ea</groupId>
-    <artifactId>real-state-api-monolithic</artifactId>
+    <artifactId>real-estate-api-monolithic</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>real-state-api-monolithic</name>
-    <description>real-state-api-monolithic</description>
+    <name>real-estate-api-monolithic</name>
+    <description>real-estate-api-monolithic</description>
     <properties>
         <java.version>17</java.version>
     </properties>
