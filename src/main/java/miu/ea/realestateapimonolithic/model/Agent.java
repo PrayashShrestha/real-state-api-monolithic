@@ -14,11 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AgentDetail {
-    @Id
-    private long id;
-
+public class Agent extends User {
     private String qualification;
     private String language;
 

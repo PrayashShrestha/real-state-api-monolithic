@@ -6,6 +6,7 @@ public class Constant {
     public static final String USER_URL_PREFIX = API_URL_v1_PREFIX + "/users";
     public static final String PROPERTY_URL_PREFIX = API_URL_v1_PREFIX + "/properties";
     public static final String ADMIN_URL_PREFIX = API_URL_v1_PREFIX + "/admin";
+    public static final String BUYER_URL_PREFIX = API_URL_v1_PREFIX + "/buyers";
 
 
 }

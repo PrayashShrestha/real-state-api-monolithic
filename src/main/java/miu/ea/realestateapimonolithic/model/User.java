@@ -10,6 +10,7 @@ import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +29,4 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private AgentDetail agentDetail;
-
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private BuyerPreference buyerPreference;
 }
