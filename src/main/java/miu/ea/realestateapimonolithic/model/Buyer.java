@@ -10,11 +10,7 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class BuyerPreference {
-    @Id
-    private long id;
-
+public class Buyer extends User {
     private PropertyTypeEnum propertyType;
     private int numOfBedrooms;
     private int numOfBathrooms;
