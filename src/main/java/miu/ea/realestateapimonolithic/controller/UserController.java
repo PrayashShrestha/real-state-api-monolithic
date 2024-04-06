@@ -19,6 +19,6 @@ public class UserController {
 
     @PostMapping
     public void saveUser(@RequestBody UserDto user) {
-
+        userService.saveUser(user);
     }
 }
