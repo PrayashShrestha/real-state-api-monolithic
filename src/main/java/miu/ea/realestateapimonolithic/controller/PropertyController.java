@@ -2,12 +2,15 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
+import miu.ea.realestateapimonolithic.dto.PropertyDto;
+import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.model.Property;
 import miu.ea.realestateapimonolithic.service.PropertyService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,9 +19,27 @@ public class PropertyController {
     private final PropertyService propertyService;
 
     @PostMapping
-    public void saveProperty(@RequestBody Property property) {
-
+    public ResponseEntity<String> saveProperty(@RequestBody Property property){
+        propertyService.save(property);
+        return new ResponseEntity<>("Property was created successfully", HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<PropertyDto>> getAllForGuest(){
+        List<PropertyDto> properties = propertyService.findAllByListingStatus();
+        return new ResponseEntity<>(properties, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PropertyDto> getAllPropertyByUser(@PathVariable Long id) throws PropertyException {
+        PropertyDto property = propertyService.findById(id);
+        return new ResponseEntity<>(property, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePropertyById(@PathVariable Long id) throws PropertyException {
+        propertyService.deleteById(id);
+        return new ResponseEntity<>("Property Deleted Successfully", HttpStatus.OK);
+    }
 
 }
