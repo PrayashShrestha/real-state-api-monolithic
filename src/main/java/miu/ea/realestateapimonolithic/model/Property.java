@@ -1,5 +1,6 @@
 package miu.ea.realestateapimonolithic.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
@@ -19,14 +20,20 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     private PropertyTypeEnum propertyType;
+    private String location;
+    private double price;
+    private String description;
     private int numOfBedrooms;
     private int numOfBathrooms;
-    private double price;
-    private String location;
 
     @Enumerated(EnumType.STRING)
     private ListingTypeEnum listingType;
 
     @Enumerated(EnumType.STRING)
     private ListingStatusEnum listingStatus;
+
+    @JsonBackReference(value = "user-property")
+    @ManyToOne
+    @JoinColumn(name = "user-id")
+    private User user;
 }
