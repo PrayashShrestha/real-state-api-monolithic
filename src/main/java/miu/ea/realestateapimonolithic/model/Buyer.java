@@ -1,9 +1,8 @@
 package miu.ea.realestateapimonolithic.model;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
-import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
 @Entity
 @Getter
@@ -11,9 +10,6 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Buyer extends User {
-    private PropertyTypeEnum propertyType;
-    private int numOfBedrooms;
-    private int numOfBathrooms;
-    private double maxPrice;
-    private String favoriteLocation;
+    @Embedded
+    private BuyerPreference preference;
 }
