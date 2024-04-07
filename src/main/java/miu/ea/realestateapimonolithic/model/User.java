@@ -36,4 +36,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Property> properties;
 
+    @OneToOne
+    private AgentReview agentReview;
+
 }

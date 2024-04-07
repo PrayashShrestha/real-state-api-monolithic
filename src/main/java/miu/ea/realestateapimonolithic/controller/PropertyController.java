@@ -19,8 +19,8 @@ public class PropertyController {
     private final PropertyService propertyService;
 
     @PostMapping
-    public ResponseEntity<String> saveProperty(@RequestBody Property property){
-        propertyService.save(property);
+    public ResponseEntity<String> saveProperty(@RequestBody PropertyDto propertyDto){
+        propertyService.save(propertyDto);
         return new ResponseEntity<>("Property was created successfully", HttpStatus.OK);
     }
 

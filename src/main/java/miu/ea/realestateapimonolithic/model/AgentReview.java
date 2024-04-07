@@ -14,4 +14,7 @@ public class AgentReview {
 
     private String comment;
     private int rating;
+
+    @OneToOne
+    private User user;
 }
