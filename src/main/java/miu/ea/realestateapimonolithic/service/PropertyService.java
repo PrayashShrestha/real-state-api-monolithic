@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PropertyService {
 
-    void save(Property property);
+    void save(PropertyDto propertyDto);
 
     List<PropertyDto> findAll();
 

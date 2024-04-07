@@ -29,7 +29,8 @@ public class PropertyServiceImpl implements PropertyService {
 
 
     @Override
-    public void save(Property property) {
+    public void save(PropertyDto propertyDto) {
+        Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
         propertyRepository.save(property);
     }
 
