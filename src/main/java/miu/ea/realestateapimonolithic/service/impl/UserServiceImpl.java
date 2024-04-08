@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidInputException("Invalid user role.");
         }
 
-        Role role = roleRepository.findRoleByRole(userDto.getUserRole()).get();
+        Role role = roleRepository.findByRole(userDto.getUserRole());
 
         // map dto to entity
         User user = UserMapper.MAPPER.mapToUser(userDto);
