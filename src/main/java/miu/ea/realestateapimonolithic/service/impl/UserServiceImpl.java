@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
+import miu.ea.realestateapimonolithic.congifuration.SecurityConfig;
 import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
@@ -30,11 +31,12 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final BuyerRepository buyerRepository;
     private final AgentRepository agentRepository;
+    private final SecurityConfig securityConfig;
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public User saveUser(UserDto userDto) {
+    public void saveUser(UserDto userDto) {
         // check duplicate email
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
 
@@ -53,21 +55,21 @@ public class UserServiceImpl implements UserService {
 
         // map dto to entity
         User user = UserMapper.MAPPER.mapToUser(userDto);
+        user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRole(role);
         user.setStatus(UserStatusEnum.ACTIVE);
 
         if (userDto.getUserRole() == RoleEnum.BUYER) {
             Buyer buyer = new Buyer();
             BeanUtils.copyProperties(user, buyer);
-            return buyerRepository.save(buyer);
+             buyerRepository.save(buyer);
         } else if (userDto.getUserRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
-            return agentRepository.save(agent);
+             agentRepository.save(agent);
         } else if (userDto.getUserRole() == RoleEnum.SELLER) {
-            return userRepository.save(user);
+             userRepository.save(user);
         }
-        return user;
     }
 
     @Override

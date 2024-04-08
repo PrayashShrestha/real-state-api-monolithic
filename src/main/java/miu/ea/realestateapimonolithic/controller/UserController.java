@@ -22,8 +22,8 @@ public class UserController {
     private final PropertyService propertyService;
 
     @PostMapping
-    public User saveUser(@RequestBody UserDto user) {
-        return userService.saveUser(user);
+    public void saveUser(@RequestBody UserDto user) {
+         userService.saveUser(user);
     }
 
     @GetMapping("/{id}/property")
