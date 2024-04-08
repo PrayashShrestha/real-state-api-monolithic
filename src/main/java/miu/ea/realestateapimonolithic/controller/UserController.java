@@ -7,6 +7,8 @@ import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
