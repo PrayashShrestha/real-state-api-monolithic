@@ -6,4 +6,5 @@ import miu.ea.realestateapimonolithic.model.User;
 public interface UserService {
 
     void saveUser(UserDto user);
+
 }
