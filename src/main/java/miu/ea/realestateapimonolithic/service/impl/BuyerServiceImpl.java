@@ -2,6 +2,7 @@ package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.model.Buyer;
+import miu.ea.realestateapimonolithic.model.BuyerPreference;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
 import miu.ea.realestateapimonolithic.service.BuyerService;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,12 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public void saveBuyer(Buyer buyer) {
+    public void updateBuyerPreferences(Long id, BuyerPreference buyerPreference) {
+        Buyer buyer = buyerRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Buyer not found.")
+        );
+
+        buyer.setPreference(buyerPreference);
         buyerRepository.save(buyer);
-    }
-
-    @Override
-    public void updateBuyer(Buyer buyer) {
-
     }
 }

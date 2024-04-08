@@ -113,8 +113,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not Found."));
 
-        System.out.println(oldPassword);
-        System.out.println("----------------");
         if (!securityConfig.passwordEncoder().matches(oldPassword, user.getPassword())) {
             throw new MismatchException("Your old password didn't match with existing password.");
         }
