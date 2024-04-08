@@ -24,7 +24,6 @@ public class BuyerServiceImpl implements BuyerService {
         Buyer buyer = buyerRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Buyer not found.")
         );
-
         buyer.setPreference(buyerPreference);
         buyerRepository.save(buyer);
     }
