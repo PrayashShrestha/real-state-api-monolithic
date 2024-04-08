@@ -22,4 +22,9 @@ public class BuyerServiceImpl implements BuyerService {
     public void saveBuyer(Buyer buyer) {
         buyerRepository.save(buyer);
     }
+
+    @Override
+    public void updateBuyer(Buyer buyer) {
+
+    }
 }

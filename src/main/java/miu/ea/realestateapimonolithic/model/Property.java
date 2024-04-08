@@ -32,8 +32,8 @@ public class Property {
     @Enumerated(EnumType.STRING)
     private ListingStatusEnum listingStatus;
 
-    @JsonBackReference(value = "user-property")
+//    @JsonBackReference(value = "user-property")
     @ManyToOne
-    @JoinColumn(name = "user-id")
+//    @JoinColumn(name = "user-id")
     private User user;
 }
