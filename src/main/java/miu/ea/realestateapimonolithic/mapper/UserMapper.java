@@ -11,10 +11,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface UserMapper {
     UserMapper MAPPER = Mappers.getMapper(UserMapper.class);
-
-    @Mapping(source = "status", target = "status")
     UserDto mapToUserDto(User user);
-
-    @Mapping(source = "status", target = "status")
     User mapToUser(UserDto userDto);
 }

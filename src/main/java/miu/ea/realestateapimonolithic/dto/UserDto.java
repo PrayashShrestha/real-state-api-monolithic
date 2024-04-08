@@ -17,5 +17,4 @@ public class UserDto {
     private String email;
     private String password;
     private RoleEnum userRole;
-    private UserStatusEnum status;
 }
