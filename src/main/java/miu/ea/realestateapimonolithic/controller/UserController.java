@@ -7,8 +7,6 @@ import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +20,8 @@ public class UserController {
     private final PropertyService propertyService;
 
     @PostMapping
-    public void saveUser(@RequestBody UserDto user) {
-        userService.saveUser(user);
+    public User saveUser(@RequestBody UserDto user) {
+        return userService.saveUser(user);
     }
 
     @GetMapping("/{id}/property")
@@ -32,4 +30,25 @@ public class UserController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
+
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable long id) {
+        return userService.findUser(id);
+    }
+
+    @GetMapping
+    public List<User> findAllUser(){
+        return userService.findAllUsers();
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable long id, @RequestBody User user){
+        return userService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable long id){
+        userService.deleteUser(id);
+    }
 }
+

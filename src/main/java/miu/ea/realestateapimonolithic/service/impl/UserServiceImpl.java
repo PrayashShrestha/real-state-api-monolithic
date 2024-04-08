@@ -6,6 +6,7 @@ import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
+import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.InvalidInputException;
 import miu.ea.realestateapimonolithic.mapper.UserMapper;
 import miu.ea.realestateapimonolithic.model.*;
@@ -18,6 +19,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public void saveUser(UserDto userDto) {
+    public User saveUser(UserDto userDto) {
         // check duplicate email
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
 
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidInputException("Invalid user role.");
         }
 
-        Role role = roleRepository.findByRole(userDto.getUserRole());
+        Role role = roleRepository.findRoleByRole(userDto.getUserRole()).get();
 
         // map dto to entity
         User user = UserMapper.MAPPER.mapToUser(userDto);
@@ -56,14 +59,49 @@ public class UserServiceImpl implements UserService {
         if (userDto.getUserRole() == RoleEnum.BUYER) {
             Buyer buyer = new Buyer();
             BeanUtils.copyProperties(user, buyer);
-            buyerRepository.save(buyer);
+            return buyerRepository.save(buyer);
         } else if (userDto.getUserRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
-            agentRepository.save(agent);
+            return agentRepository.save(agent);
         } else if (userDto.getUserRole() == RoleEnum.SELLER) {
-            userRepository.save(user);
+            return userRepository.save(user);
         }
+        return user;
     }
 
+    @Override
+    public User findUser(long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new NotFoundException("User not Found.");
+        }
+        return user.get();
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User updateUser(long id, User user) {
+        Optional<User> retrievedUser = userRepository.findById(id);
+        if(retrievedUser.isEmpty()){
+            throw new NotFoundException("User not Found.");
+        }
+        User updatedUser = retrievedUser.get();
+        updatedUser.setName(user.getName());
+        updatedUser.setTel(user.getTel());
+        updatedUser.setLocation(user.getLocation());
+
+        userRepository.save(updatedUser);
+        return updatedUser;
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
 }
