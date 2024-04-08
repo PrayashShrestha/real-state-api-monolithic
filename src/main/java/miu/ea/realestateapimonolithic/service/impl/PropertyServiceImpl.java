@@ -4,16 +4,19 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
+import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.PropertyMapper;
 import miu.ea.realestateapimonolithic.model.Property;
-import miu.ea.realestateapimonolithic.model.Role;
 import miu.ea.realestateapimonolithic.model.User;
+import miu.ea.realestateapimonolithic.repository.CustomPropertyRepository;
 import miu.ea.realestateapimonolithic.repository.PropertyRepository;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
-
+    private final CustomPropertyRepository customPropertyRepository;
 
     @Override
     public void save(PropertyDto propertyDto) {
@@ -141,5 +144,10 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.save(existingProperty);
 
         LOG.info("Property {} has been rejected.", propertyId);
+    }
+
+    @Override
+    public Page<Property> search(PropertySearchRequest searchRequest, Pageable pageable) {
+        return customPropertyRepository.searchProperty(searchRequest, pageable);
     }
 }

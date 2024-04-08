@@ -18,17 +18,18 @@ import java.util.List;
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private PropertyTypeEnum propertyType;
     private String location;
-    private double price;
+    private Double price;
     private String description;
-    private int numOfBedrooms;
-    private int numOfBathrooms;
+    private Integer numOfBedrooms;
+    private Integer numOfBathrooms;
 
     @OneToMany
+    @JoinColumn(name = "property_id")
     private List<PropertyPhoto> photos;
 
     @Enumerated(EnumType.STRING)

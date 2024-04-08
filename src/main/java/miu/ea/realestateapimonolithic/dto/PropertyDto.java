@@ -11,14 +11,14 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 @AllArgsConstructor
 @Builder
 public class PropertyDto {
-    private long id;
+    private Long id;
 
     private PropertyTypeEnum propertyType;
     private String location;
-    private double price;
+    private Double price;
     private String description;
-    private int numOfBedrooms;
-    private int numOfBathrooms;
+    private Integer numOfBedrooms;
+    private Integer numOfBathrooms;
     private ListingTypeEnum listingType;
     private ListingStatusEnum listingStatus;
 }
