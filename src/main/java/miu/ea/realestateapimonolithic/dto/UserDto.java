@@ -1,6 +1,7 @@
 package miu.ea.realestateapimonolithic.dto;
 
 import lombok.*;
+import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.model.Role;
 
 @Setter
@@ -13,5 +14,5 @@ public class UserDto {
 
     private String email;
     private String password;
-    private Role role;
+    private RoleEnum userRole;
 }
