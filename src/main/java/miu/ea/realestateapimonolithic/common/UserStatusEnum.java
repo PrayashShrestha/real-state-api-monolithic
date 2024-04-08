@@ -1,17 +1,19 @@
 package miu.ea.realestateapimonolithic.common;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
 public enum UserStatusEnum {
     ACTIVE("Active"),
     DEACTIVE("Deactive"),
     LOCKED("Locked");
 
-    private String status;
+    private final String status;
 
     UserStatusEnum(String status) {
         this.status = status;
     }
 
-    public String getStatus() {
-        return this.status;
-    }
 }

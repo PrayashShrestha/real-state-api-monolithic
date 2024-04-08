@@ -1,6 +1,8 @@
 package miu.ea.realestateapimonolithic.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.model.Role;
 
 @Setter
@@ -14,4 +16,5 @@ public class UserDto {
     private String email;
     private String password;
     private Role role;
+    private UserStatusEnum status;
 }

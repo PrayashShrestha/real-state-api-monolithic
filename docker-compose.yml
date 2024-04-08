@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_USER: spring
       MYSQL_PASSWORD: spring
-      MYSQL_DATABASE: realstate
+      MYSQL_DATABASE: real_state
       MYSQL_ROOT_PASSWORD: secret
     ports:
       - 3306:3306
