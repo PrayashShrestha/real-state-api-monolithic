@@ -32,11 +32,4 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
-//    @JsonManagedReference(value = "user-property")
-//    @OneToMany(mappedBy = "user")
-//    private List<Property> properties;
-//
-//    @OneToOne
-//    private AgentReview agentReview;
-
 }

@@ -23,9 +23,5 @@ public class AgentController {
         return new ResponseEntity<>(agentReviews, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/addReview")
-    public ResponseEntity<String> addAgentReview(@PathVariable Long id, @RequestBody AgentReviewDto agentReviewDto){
-        agentService.addAgentReview(agentReviewDto);
-        return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
-    }
+
 }

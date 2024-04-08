@@ -18,7 +18,6 @@ public class Agent extends User {
     private String qualification;
     private String language;
 
-    @OneToMany
-    @JoinColumn(name="agent_id")
+    @OneToMany(mappedBy = "agent")
     private List<AgentReview> reviews = new ArrayList<>();
 }
