@@ -1,6 +1,7 @@
 package miu.ea.realestateapimonolithic.dto;
 
 import lombok.*;
+import miu.ea.realestateapimonolithic.model.Agent;
 import miu.ea.realestateapimonolithic.model.User;
 
 @Setter
@@ -10,9 +11,8 @@ import miu.ea.realestateapimonolithic.model.User;
 @Builder
 public class AgentReviewDto {
     private long id;
-
     private String comment;
     private int rating;
-
-    private User user;
+    private Agent agent;
+    private User reviewer;
 }

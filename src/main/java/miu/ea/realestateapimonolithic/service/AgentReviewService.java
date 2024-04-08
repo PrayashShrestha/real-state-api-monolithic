@@ -8,5 +8,5 @@ public interface AgentReviewService {
 
     void saveAgentReview(AgentReviewDto agentReview);
 
-    List<AgentReviewDto> getAgentReview(long id);
+    List<AgentReviewDto> getAgentReviewsByAgentId(long id);
 }

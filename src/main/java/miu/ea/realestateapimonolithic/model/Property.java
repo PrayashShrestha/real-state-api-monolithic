@@ -7,6 +7,8 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -25,6 +27,9 @@ public class Property {
     private String description;
     private int numOfBedrooms;
     private int numOfBathrooms;
+
+    @OneToMany
+    private List<PropertyPhoto> photos;
 
     @Enumerated(EnumType.STRING)
     private ListingTypeEnum listingType;
