@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping
     public void saveUser(@RequestBody UserDto user) {
-        userService.saveUser(user);
+         userService.saveUser(user);
     }
 
     @GetMapping("/{id}/property")
@@ -32,4 +32,25 @@ public class UserController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
+
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable long id) {
+        return userService.findUser(id);
+    }
+
+    @GetMapping
+    public List<User> findAllUser(){
+        return userService.findAllUsers();
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable long id, @RequestBody User user){
+        return userService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable long id){
+        userService.deleteUser(id);
+    }
 }
+

@@ -8,8 +8,7 @@ import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,7 +25,8 @@ public class User {
     private String tel;
     private String location;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Enumerated(EnumType.STRING)

@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
+import miu.ea.realestateapimonolithic.congifuration.SecurityConfig;
 import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
+import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.InvalidInputException;
 import miu.ea.realestateapimonolithic.mapper.UserMapper;
 import miu.ea.realestateapimonolithic.model.*;
@@ -18,6 +20,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final BuyerRepository buyerRepository;
     private final AgentRepository agentRepository;
+    private final SecurityConfig securityConfig;
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -50,20 +55,55 @@ public class UserServiceImpl implements UserService {
 
         // map dto to entity
         User user = UserMapper.MAPPER.mapToUser(userDto);
+        user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRole(role);
         user.setStatus(UserStatusEnum.ACTIVE);
 
         if (userDto.getUserRole() == RoleEnum.BUYER) {
             Buyer buyer = new Buyer();
             BeanUtils.copyProperties(user, buyer);
-            buyerRepository.save(buyer);
+             buyerRepository.save(buyer);
         } else if (userDto.getUserRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
-            agentRepository.save(agent);
+             agentRepository.save(agent);
         } else if (userDto.getUserRole() == RoleEnum.SELLER) {
-            userRepository.save(user);
+             userRepository.save(user);
         }
     }
 
+    @Override
+    public User findUser(long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new NotFoundException("User not Found.");
+        }
+        return user.get();
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User updateUser(long id, User user) {
+        Optional<User> retrievedUser = userRepository.findById(id);
+        if(retrievedUser.isEmpty()){
+            throw new NotFoundException("User not Found.");
+        }
+        User updatedUser = retrievedUser.get();
+        updatedUser.setName(user.getName());
+        updatedUser.setTel(user.getTel());
+        updatedUser.setLocation(user.getLocation());
+
+        userRepository.save(updatedUser);
+        return updatedUser;
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
 }
