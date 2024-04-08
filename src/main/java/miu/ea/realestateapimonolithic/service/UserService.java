@@ -15,6 +15,7 @@ public interface UserService {
     User updateUser(long id, User user);
     void deleteUser(long id);
 
+    void updatePassword(long id, String oldPassword, String newPassword);
     void activateUser(long id);
     void deactivateUser(long id);
 

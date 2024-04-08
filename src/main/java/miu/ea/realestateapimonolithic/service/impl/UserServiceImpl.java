@@ -8,6 +8,7 @@ import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
+import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.InvalidInputException;
 import miu.ea.realestateapimonolithic.mapper.UserMapper;
@@ -105,6 +106,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updatePassword(long id, String oldPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not Found."));
+
+        System.out.println(oldPassword);
+        System.out.println("----------------");
+        if (!securityConfig.passwordEncoder().matches(oldPassword, user.getPassword())) {
+            throw new MismatchException("Your old password didn't match with existing password.");
+        }
+
+        String encodedNewPassword = securityConfig.passwordEncoder().encode(newPassword);
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
     }
 
     public void activateUser(long id) {
