@@ -36,4 +36,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NotAuthorizedException.class)
+    public ResponseEntity<ErrorDetails> handleNotAuthorizedException (NotAuthorizedException exception, WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                ErrorCode.NOT_AUTHORIZED
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
+
 }
