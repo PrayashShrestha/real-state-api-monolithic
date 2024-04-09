@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+/log/activityLogs.log
+/logs/activityLogs.log
+/log/activityLogs-24-04-09_12-51.1.log
+/log/activityLogs-24-04-09_12-52.0.log
+/logs/activityLogs-24-04-09_14-48.0.log
+/logs/activityLogs-24-04-09_14-49.0.log
+/logs/activityLogs-24-04-09_14-50.0.log
+/logs/activityLogs-24-04-09_14-53.0.log
+/logs/activityLogs-24-04-09_14-55.0.log
+/logs/activityLogs-24-04-09_14-56.0.log
+/logs/activityLogs-24-04-09_14-57.0.log
