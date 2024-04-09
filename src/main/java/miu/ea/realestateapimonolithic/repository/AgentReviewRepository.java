@@ -11,4 +11,7 @@ import java.util.List;
 public interface AgentReviewRepository extends JpaRepository<AgentReview, Long> {
     @Query("Select review from AgentReview review join review.agent a where a.id= :agentId")
     List<AgentReview> findAgentReviewByAgent_Id (Long agentId);
+
+    @Query("Select avg(ar.rating) from AgentReview ar join ar.agent a where a.id = :agentId")
+    Double getAverageRating(Long agentId);
 }

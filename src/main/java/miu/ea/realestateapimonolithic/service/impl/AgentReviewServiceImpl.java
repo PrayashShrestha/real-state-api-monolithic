@@ -11,9 +11,9 @@ import miu.ea.realestateapimonolithic.model.Buyer;
 import miu.ea.realestateapimonolithic.repository.AgentRepository;
 import miu.ea.realestateapimonolithic.repository.AgentReviewRepository;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
-import miu.ea.realestateapimonolithic.repository.UserRepository;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +24,9 @@ public class AgentReviewServiceImpl implements AgentReviewService {
     private final AgentReviewRepository agentReviewRepository;
     private final AgentRepository agentRepository;
     private final BuyerRepository buyerRepository;
-    private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public void saveAgentReview(AgentReviewDto agentReviewDto) {
         Long agentId = agentReviewDto.getAgent().getId();
         Long buyerId = agentReviewDto.getReviewer().getId();
@@ -39,6 +39,11 @@ public class AgentReviewServiceImpl implements AgentReviewService {
         agentReview.setAgent(agent);
         agentReview.setReviewer(reviewer);
         agentReviewRepository.save(agentReview);
+
+        // update averageRating for Agent
+        Double averageRating = agentReviewRepository.getAverageRating(agentId);
+        agent.setAverageRating(averageRating);
+        agentRepository.save(agent);
     }
 
     @Override
