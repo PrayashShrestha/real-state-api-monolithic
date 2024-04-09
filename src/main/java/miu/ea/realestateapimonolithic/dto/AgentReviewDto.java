@@ -2,7 +2,7 @@ package miu.ea.realestateapimonolithic.dto;
 
 import lombok.*;
 import miu.ea.realestateapimonolithic.model.Agent;
-import miu.ea.realestateapimonolithic.model.User;
+import org.apache.catalina.User;
 
 @Setter
 @Getter

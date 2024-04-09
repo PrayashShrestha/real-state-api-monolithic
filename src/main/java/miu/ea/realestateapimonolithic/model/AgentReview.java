@@ -11,15 +11,15 @@ import lombok.Setter;
 public class AgentReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String comment;
-    private int rating;
+    private Integer rating;
 
     @JsonBackReference(value = "agent-review")
     @ManyToOne
     private Agent agent;
 
     @ManyToOne
-    private User reviewer;
+    private Buyer reviewer;
 }

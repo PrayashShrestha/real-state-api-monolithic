@@ -9,7 +9,7 @@ public interface AgentReviewService {
 
     void saveAgentReview(AgentReviewDto agentReview);
 
-    List<AgentReviewPreviewDto> getAgentReviewsByAgentId(long id);
+    List<AgentReviewDto> getAgentReviewsByAgentId(long id);
 
-    List<AgentReviewPreviewDto> getAllAgentReview();
+    List<AgentReviewDto> getAllAgentReview();
 }
