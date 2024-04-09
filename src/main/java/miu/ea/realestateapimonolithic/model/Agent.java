@@ -1,10 +1,7 @@
 package miu.ea.realestateapimonolithic.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -20,10 +17,10 @@ public class Agent extends User {
     private String qualification;
     private String language;
 
-    private double averageRating;
+    private Double averageRating;
 
     @JsonManagedReference(value = "agent-review")
     @BatchSize(size = 10)
-    @OneToMany(mappedBy = "agent")
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
     private List<AgentReview> reviews = new ArrayList<>();
 }

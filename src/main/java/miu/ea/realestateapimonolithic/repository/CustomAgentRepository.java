@@ -1,18 +1,20 @@
 package miu.ea.realestateapimonolithic.repository;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
-import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.dto.AgentSearchRequest;
-import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.model.Agent;
-import miu.ea.realestateapimonolithic.model.Property;
+import miu.ea.realestateapimonolithic.model.AgentReview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,12 +24,20 @@ public class CustomAgentRepository {
     public Page<Agent> searchAgent(AgentSearchRequest searchRequest, Pageable pageable) {
         Specification<Agent> specs = Specification
                 .where(withStatus(UserStatusEnum.ACTIVE))
+                .and(joinReviews())
                 .and(nameLike(searchRequest.getName()))
                 .and(qualificationLike(searchRequest.getQualification()))
                 .and(languageLike(searchRequest.getLanguage()))
                 .and(ratingGreaterThanEqual(searchRequest.getRating()))
                 .and(locationLike(searchRequest.getLocation()));
         return agentRepository.findAll(specs, pageable);
+    }
+
+    static Specification<Agent> joinReviews() {
+        return (root, query, criteriaBuilder) -> {
+            root.fetch("reviews");
+            return criteriaBuilder.equal(root.get("id"), root.get("reviews").get("id"));
+        };
     }
 
     static Specification<Agent> withStatus(UserStatusEnum userStatus) {

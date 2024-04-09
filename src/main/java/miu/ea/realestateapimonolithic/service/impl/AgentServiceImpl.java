@@ -1,12 +1,19 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import miu.ea.realestateapimonolithic.dto.AgentDto;
+import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
 import miu.ea.realestateapimonolithic.dto.AgentSearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
+import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.mapper.AgentMapper;
+import miu.ea.realestateapimonolithic.mapper.AgentReviewMapper;
 import miu.ea.realestateapimonolithic.model.Agent;
+import miu.ea.realestateapimonolithic.model.Property;
+import miu.ea.realestateapimonolithic.repository.AgentRepository;
 import miu.ea.realestateapimonolithic.repository.CustomAgentRepository;
 import miu.ea.realestateapimonolithic.service.AgentService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AgentServiceImpl implements AgentService {
     private final CustomAgentRepository customAgentRepository;
+    private final AgentRepository agentRepository;
 
     @Override
     public SearchResponse search(AgentSearchRequest searchRequest, Pageable pageable) {
@@ -26,9 +34,29 @@ public class AgentServiceImpl implements AgentService {
 
         return SearchResponse.builder()
                 .success(true)
-                .data(list.stream().map(agent -> AgentMapper.toDto(agent)).collect(Collectors.toList()))
+                .data(list.stream().map(AgentMapper::toDto).collect(Collectors.toList()))
                 .totalPages(page.getTotalPages())
                 .totalElements(page.getTotalElements())
                 .build();
+    }
+
+    @Override
+    public AgentDto getAgentById(Long userId) {
+        Agent existingAgent = agentRepository.findById(userId).orElseThrow(
+                () -> {
+                    return new NotFoundException("User not found, id=" + userId);
+                }
+        );
+        AgentDto agentDto = new AgentDto();
+        BeanUtils.copyProperties(existingAgent, agentDto);
+
+        if (existingAgent.getReviews() != null) {
+            List<AgentReviewDto> reviews = existingAgent.getReviews().stream()
+                    .map(AgentReviewMapper::toDto)
+                    .collect(Collectors.toList());
+            agentDto.setReviews(reviews);
+        }
+
+        return agentDto;
     }
 }
