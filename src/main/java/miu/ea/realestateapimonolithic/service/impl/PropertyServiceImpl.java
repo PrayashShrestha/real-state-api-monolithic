@@ -5,6 +5,8 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
+import miu.ea.realestateapimonolithic.dto.SearchResponse;
+import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.NotAuthorizedException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
@@ -17,7 +19,9 @@ import miu.ea.realestateapimonolithic.repository.PropertyRepository;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -151,7 +155,26 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Page<Property> search(PropertySearchRequest searchRequest, Pageable pageable) {
-        return customPropertyRepository.searchProperty(searchRequest, pageable);
+    public SearchResponse search(PropertySearchRequest searchRequest, Pageable pageable) {
+        Page<Property> page = customPropertyRepository.searchProperty(searchRequest, pageable);
+        List<Property> list = page.getContent();
+
+        return SearchResponse.builder()
+                .success(true)
+                .data(list.stream().map(property -> toDto(property)).collect(Collectors.toList()))
+                .totalPages(page.getTotalPages())
+                .totalElements(page.getTotalElements())
+                .build();
+    }
+
+    private PropertyDto toDto(Property property) {
+        PropertyDto propertyDto = new PropertyDto();
+        BeanUtils.copyProperties(property, propertyDto);
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(property.getUser(), userDto);
+        propertyDto.setUser(userDto);
+
+        return propertyDto;
     }
 }
