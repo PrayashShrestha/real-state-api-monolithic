@@ -2,6 +2,7 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
+import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.model.User;
@@ -51,6 +52,14 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable long id){
         userService.deleteUser(id);
+    }
+
+    @GetMapping("/{userId}/deactivate")
+    public ApiResponse<?> deactivateUser(@PathVariable Long userId) {
+        userService.deactivateUser(userId);
+        return ApiResponse.builder()
+                .success(true)
+                .build();
     }
 }
 
