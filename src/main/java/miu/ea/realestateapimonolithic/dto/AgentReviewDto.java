@@ -8,7 +8,6 @@ import org.apache.catalina.User;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AgentReviewDto {
     private long id;
     private String comment;
