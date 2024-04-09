@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByRole(accountRegistrationRequest.getUserRole());
 
         // map dto to entity
-        User user = UserMapper.MAPPER.mapToUser(accountRegistrationRequest);
+        User user = UserMapper.mapToUser(accountRegistrationRequest);
         user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRole(role);
         user.setStatus(UserStatusEnum.ACTIVE);
