@@ -125,6 +125,7 @@ public class PropertyServiceImpl implements PropertyService {
     public void addPhotos(Long propertyId, PropertyPhoto propertyPhoto) {
         Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not found " + propertyId));
         property.getPhotos().add(propertyPhoto);
+        propertyRepository.save(property);
     }
 
     @Override

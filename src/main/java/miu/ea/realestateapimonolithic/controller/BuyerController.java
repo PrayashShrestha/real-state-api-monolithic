@@ -3,6 +3,7 @@ package miu.ea.realestateapimonolithic.controller;
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
 import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
+import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.model.Buyer;
 import miu.ea.realestateapimonolithic.model.BuyerPreference;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
@@ -10,6 +11,8 @@ import miu.ea.realestateapimonolithic.service.BuyerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +42,17 @@ public class BuyerController {
     public ResponseEntity<String> addAgentReview(@RequestBody AgentReviewDto agentReviewDto){
         agentReviewService.saveAgentReview(agentReviewDto);
         return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("{buyerId}/favorites")
+    public ResponseEntity<String> addFavoriteProperty(@PathVariable Long buyerId, @RequestBody PropertyDto propertyDto){
+        buyerService.addFavouriteProperty(buyerId, propertyDto);
+        return new ResponseEntity<>("Property added to favourites", HttpStatus.OK);
+    }
+
+    @GetMapping("{buyerId}/favorites")
+    public ResponseEntity<List<PropertyDto>> getFavoriteProperties(@PathVariable Long buyerId){
+        List<PropertyDto> favorites = buyerService.viewFavouriteProperties(buyerId);
+        return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 }
