@@ -1,8 +1,9 @@
 package miu.ea.realestateapimonolithic.model;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,4 +13,12 @@ import lombok.*;
 public class Buyer extends User {
     @Embedded
     private BuyerPreference preference;
+
+    @OneToMany
+    @JoinTable(
+            name = "favorite_properties",
+            joinColumns = @JoinColumn(name = "buyer-id"),
+            inverseJoinColumns = @JoinColumn(name = "property-id")
+    )
+    private List<Property> favouriteProperties;
 }
