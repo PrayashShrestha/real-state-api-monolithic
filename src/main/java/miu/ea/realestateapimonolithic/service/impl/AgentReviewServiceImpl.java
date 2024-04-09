@@ -2,16 +2,12 @@ package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
-import miu.ea.realestateapimonolithic.dto.AgentReviewPreviewDto;
-import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.AgentReviewMapper;
-import miu.ea.realestateapimonolithic.mapper.UserMapper;
 import miu.ea.realestateapimonolithic.model.Agent;
 import miu.ea.realestateapimonolithic.model.AgentReview;
 import miu.ea.realestateapimonolithic.model.Buyer;
-import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.repository.AgentRepository;
 import miu.ea.realestateapimonolithic.repository.AgentReviewRepository;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
@@ -20,7 +16,6 @@ import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

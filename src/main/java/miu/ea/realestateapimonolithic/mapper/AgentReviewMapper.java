@@ -3,11 +3,8 @@ package miu.ea.realestateapimonolithic.mapper;
 import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
 import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.model.AgentReview;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.BeanUtils;
 
-@Mapper
 public class AgentReviewMapper {
 
     public static AgentReviewDto toDto(AgentReview agentReview){
