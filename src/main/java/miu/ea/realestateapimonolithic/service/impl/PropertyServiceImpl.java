@@ -13,6 +13,7 @@ import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.PropertyMapper;
 import miu.ea.realestateapimonolithic.model.Property;
+import miu.ea.realestateapimonolithic.model.PropertyPhoto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.repository.CustomPropertyRepository;
 import miu.ea.realestateapimonolithic.repository.PropertyRepository;
@@ -118,6 +119,12 @@ public class PropertyServiceImpl implements PropertyService {
                 throw new PropertyException("Property Doesn't Exist");
 
         }
+    }
+
+    @Override
+    public void addPhotos(Long propertyId, PropertyPhoto propertyPhoto) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not found " + propertyId));
+        property.getPhotos().add(propertyPhoto);
     }
 
     @Override

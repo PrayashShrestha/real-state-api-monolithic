@@ -6,9 +6,12 @@ import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +34,7 @@ public class Property {
     private Integer numOfBathrooms;
 
     @OneToMany
+    @Cascade(value = CascadeType.ALL)
     @JoinColumn(name = "property_id")
     private List<PropertyPhoto> photos;
 
