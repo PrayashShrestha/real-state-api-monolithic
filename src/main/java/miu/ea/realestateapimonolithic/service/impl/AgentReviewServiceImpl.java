@@ -50,42 +50,14 @@ public class AgentReviewServiceImpl implements AgentReviewService {
     public List<AgentReviewDto> getAgentReviewsByAgentId(long id) {
         return agentReviewRepository.findAgentReviewByAgent_Id(id)
                 .stream()
-                .map(agentReview -> {
-                            Long agentId = agentReview.getAgent().getId();
-                            Long reviewerId = agentReview.getReviewer().getId();
-                            User agent = userRepository.findById(agentId).orElseThrow(() -> new NotFoundException("Agent not Found" + agentId));
-                            UserDto agentDto = UserDto.builder().email(agent.getEmail()).name(agent.getName()).id(agentId).build();
-                            User reviewer = userRepository.findById(reviewerId).orElseThrow(() -> new NotFoundException("Reviewer not Found" + reviewerId));
-                            UserDto reviewerDto = UserDto.builder().email(reviewer.getEmail()).name(reviewer.getName()).id(reviewer.getId()).build();
-                            AgentReviewDto agentReviewDto = AgentReviewDto.builder()
-                                    .id(agentReview.getId())
-                                    .comment(agentReview.getComment())
-                                    .rating(agentReview.getRating())
-                                    .agent(agentDto).reviewer(reviewerDto).build();
-                            return agentReviewDto;
-                        }
-                )
+                .map(AgentReviewMapper::toDto)
                 .collect(Collectors.toList());
     }
     @Override
     public List<AgentReviewDto> getAllAgentReview() {
         return agentReviewRepository.findAll()
                 .stream()
-                .map(agentReview -> {
-                    Long agentId = agentReview.getAgent().getId();
-                    Long reviewerId = agentReview.getReviewer().getId();
-                    User agent = userRepository.findById(agentId).orElseThrow(() -> new NotFoundException("Agent not Found" + agentId));
-                    UserDto agentDto = UserDto.builder().email(agent.getEmail()).name(agent.getName()).id(agentId).build();
-                    User reviewer = userRepository.findById(reviewerId).orElseThrow(() -> new NotFoundException("Reviewer not Found" + reviewerId));
-                    UserDto reviewerDto = UserDto.builder().email(reviewer.getEmail()).name(reviewer.getName()).id(reviewer.getId()).build();
-                    AgentReviewDto agentReviewDto = AgentReviewDto.builder()
-                        .id(agentReview.getId())
-                        .comment(agentReview.getComment())
-                        .rating(agentReview.getRating())
-                        .agent(agentDto).reviewer(reviewerDto).build();
-                    return agentReviewDto;
-                }
-                )
+                .map(AgentReviewMapper::toDto)
                 .collect(Collectors.toList());
     }
 }
