@@ -7,7 +7,4 @@ import java.util.List;
 
 public interface AgentService {
 
-    void addAgentReview(AgentReviewDto agentReview);
-
-    List<AgentReviewDto> getAllAgentReview(long id);
 }
