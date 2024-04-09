@@ -1,9 +1,9 @@
 package miu.ea.realestateapimonolithic.service;
 
 import miu.ea.realestateapimonolithic.model.Buyer;
+import miu.ea.realestateapimonolithic.model.BuyerPreference;
 
 public interface BuyerService {
     Buyer getBuyerById(Long id);
-    void saveBuyer(Buyer buyer);
-    void updateBuyer(Buyer buyer);
+    void updateBuyerPreferences(Long id, BuyerPreference buyerPreference);
 }

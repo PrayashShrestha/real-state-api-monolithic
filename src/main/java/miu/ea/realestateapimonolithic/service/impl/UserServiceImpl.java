@@ -1,6 +1,7 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.congifuration.SecurityConfig;
@@ -8,6 +9,7 @@ import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
+import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.InvalidInputException;
 import miu.ea.realestateapimonolithic.mapper.UserMapper;
@@ -62,13 +64,17 @@ public class UserServiceImpl implements UserService {
         if (accountRegistrationRequest.getUserRole() == RoleEnum.BUYER) {
             Buyer buyer = new Buyer();
             BeanUtils.copyProperties(user, buyer);
-             buyerRepository.save(buyer);
-        } else if (accountRegistrationRequest.getUserRole() == RoleEnum.AGENT) {
+            // set default value for preference
+            BuyerPreference preference = new BuyerPreference();
+            preference.setPropertyType(PropertyTypeEnum.HOUSE);
+            buyer.setPreference(preference);
+            buyerRepository.save(buyer);
+        } else if (userDto.getUserRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
-             agentRepository.save(agent);
-        } else if (accountRegistrationRequest.getUserRole() == RoleEnum.SELLER) {
-             userRepository.save(user);
+            agentRepository.save(agent);
+        } else if (userDto.getUserRole() == RoleEnum.SELLER) {
+            userRepository.save(user);
         }
     }
 
@@ -105,6 +111,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updatePassword(long id, String oldPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not Found."));
+
+        if (!securityConfig.passwordEncoder().matches(oldPassword, user.getPassword())) {
+            throw new MismatchException("Your old password didn't match with existing password.");
+        }
+
+        String encodedNewPassword = securityConfig.passwordEncoder().encode(newPassword);
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
     }
 
     public void activateUser(long id) {

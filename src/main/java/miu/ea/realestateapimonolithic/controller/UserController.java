@@ -54,6 +54,11 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @PutMapping("/{id}/update-password")
+    public void updatePassword(@PathVariable long id, @RequestParam String oldPassword,@RequestParam String newPassword){
+        userService.updatePassword(id, oldPassword, newPassword);
+    }
+
     @GetMapping("/reviews")
     public ResponseEntity<List<AgentReviewDto>> getAllAgentReview(){
         List<AgentReviewDto> agentReviews = agentReviewService.getAllAgentReview();
