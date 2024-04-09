@@ -2,9 +2,11 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
+import miu.ea.realestateapimonolithic.dto.AgentSearchRequest;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.model.Property;
+import miu.ea.realestateapimonolithic.service.AgentService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SearchController {
     private final PropertyService propertyService;
+    private final AgentService agentService;
 
     @PostMapping("/property")
     public SearchResponse searchProperty(@RequestBody PropertySearchRequest searchRequest) {
         PageRequest pageRequest = PageRequest.of(searchRequest.getPageNumber()-1, searchRequest.getPageSize());
 
         return propertyService.search(searchRequest, pageRequest);
+    }
+
+    @PostMapping("/agent")
+    public SearchResponse searchAgent(@RequestBody AgentSearchRequest searchRequest) {
+        PageRequest pageRequest = PageRequest.of(searchRequest.getPageNumber()-1, searchRequest.getPageSize());
+
+        return agentService.search(searchRequest, pageRequest);
     }
 }
