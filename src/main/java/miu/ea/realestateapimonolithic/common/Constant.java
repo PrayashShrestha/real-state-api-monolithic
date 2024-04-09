@@ -15,4 +15,8 @@ public class Constant {
     public static final String SEARCH_URL_PREFIX = API_URL_v1_PREFIX + "/search";
     public static final String MESSAGE_URL_PREFIX = API_URL_v1_PREFIX + "/messages";
     public static final String AGENT_REPORT_URL_PREFIX = API_URL_v1_PREFIX + "/agentreports";
+
+    public static final int MAX_LOGIN_FAILED_ATTEMPTS = 5;
+    public static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+    public static final long TOKEN_EXPIRATION_DURATION = 3600000; // 1 hour
 }

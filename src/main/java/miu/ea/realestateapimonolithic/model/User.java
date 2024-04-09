@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -32,4 +32,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
+    private int failedAttempt;
+    private LocalDateTime lockTime;
 }

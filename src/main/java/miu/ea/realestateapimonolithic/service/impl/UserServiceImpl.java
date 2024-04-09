@@ -1,10 +1,12 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import miu.ea.realestateapimonolithic.common.Constant;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.congifuration.SecurityConfig;
 import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
+import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
@@ -21,8 +23,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -131,8 +135,32 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existingUser);
     }
 
-    public TokenResponse login(LoginRequest req) {
-        return null;
+    public ApiResponse<?> login(LoginRequest req) {
+        Optional<User> optionalUser = userRepository.findByEmail(req.getEmail());
+        if (!optionalUser.isPresent()) {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Incorrect email or password.")
+                    .build();
+        }
+        User user = optionalUser.get();
+        if (securityConfig.passwordEncoder().matches(req.getPassword(), user.getPassword())) {
+            TokenResponse tokenResponse = createTokenResponse();
+            return ApiResponse.builder()
+                    .success(true)
+                    .data(tokenResponse)
+                    .build();
+        } else {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Incorrect email or password.")
+                    .build();
+        }
+    }
+
+    private TokenResponse createTokenResponse() {
+        String token = UUID.randomUUID().toString(); // implement later
+        return TokenResponse.builder().accessToken(token).expiresIn(Constant.TOKEN_EXPIRATION_DURATION).build();
     }
 
 }

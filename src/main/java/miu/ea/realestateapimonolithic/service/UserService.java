@@ -1,8 +1,8 @@
 package miu.ea.realestateapimonolithic.service;
 
 import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
+import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
-import miu.ea.realestateapimonolithic.dto.TokenResponse;
 import miu.ea.realestateapimonolithic.model.User;
 
 import java.util.List;
@@ -18,5 +18,5 @@ public interface UserService {
     void activateUser(long id);
     void deactivateUser(long id);
 
-    TokenResponse login(LoginRequest req);
+    ApiResponse<?> login(LoginRequest req);
 }
