@@ -58,4 +58,42 @@ public class AgentServiceImpl implements AgentService {
 
         return agentDto;
     }
+
+    @Override
+    public void addAgentReview(AgentReviewDto agentReviewDto) {
+        AgentReview agentReview = AgentReviewMapper.MAPPER.mapToAgentReview(agentReviewDto);
+        agentReviewRepository.save(agentReview);
+    }
+
+    @Override
+    public List<AgentReviewDto> getAllAgentReview(long id) {
+        if(agentRepository.findById(id).isPresent()){
+            Agent agent = agentRepository.findById(id).get();
+            return  agent.getReviews()
+                    .stream()
+                    .map(AgentReviewMapper.MAPPER::mapToAgentReviewDto)
+                    .collect(Collectors.toList());
+        }
+        else {
+            try {
+                throw new AgentException("Agent Not Found");
+            } catch (AgentException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public void addLanguages(Long id, List<String> languages) {
+        Agent agent = agentRepository.findById(id).orElseThrow(()-> new NotFoundException("Agent not found."));
+        agent.setLanguages(languages);
+        agentRepository.save(agent);
+    }
+
+    @Override
+    public void addQualification(Long id, List<String> qualifications) {
+        Agent agent = agentRepository.findById(id).orElseThrow(()-> new NotFoundException("Agent not found."));
+        agent.setLanguages(qualifications);
+        agentRepository.save(agent);
+    }
 }

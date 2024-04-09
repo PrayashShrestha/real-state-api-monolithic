@@ -14,8 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Agent extends User {
-    private String qualification;
-    private String language;
+    @ElementCollection
+    @Column(columnDefinition = "String[]")
+    private List<String> qualifications;
+
+    @ElementCollection
+    @Column(columnDefinition = "String[]")
+    private List<String> languages;
 
     private Double averageRating;
 

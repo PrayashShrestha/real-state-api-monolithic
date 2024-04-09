@@ -8,5 +8,10 @@ import org.springframework.data.domain.Pageable;
 public interface AgentService {
     SearchResponse search(AgentSearchRequest searchRequest, Pageable pageable);
 
+
+    void addLanguages(Long id, List<String> languages);
+
+    void addQualification(Long id, List<String> qualifications);
+
     AgentDto getAgentById(Long userId);
 }
