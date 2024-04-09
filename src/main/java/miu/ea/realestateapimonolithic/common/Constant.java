@@ -13,6 +13,6 @@ public class Constant {
 
     public static final String AGENT_URL_PREFIX = API_URL_v1_PREFIX + "/agents";
     public static final String SEARCH_URL_PREFIX = API_URL_v1_PREFIX + "/search";
-
+    public static final String MESSAGE_URL_PREFIX = API_URL_v1_PREFIX + "/messages";
 
 }

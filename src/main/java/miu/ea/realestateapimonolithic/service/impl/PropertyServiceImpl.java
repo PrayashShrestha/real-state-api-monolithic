@@ -6,6 +6,7 @@ import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.exception.NotAuthorizedException;
+import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.PropertyMapper;
@@ -122,7 +123,7 @@ public class PropertyServiceImpl implements PropertyService {
         Property existingProperty = propertyRepository.findById(propertyId).orElseThrow(
                 () -> {
                     LOG.info("Property {} not found", propertyId);
-                    return new RuntimeException("Property not found, id=" + propertyId);
+                    return new NotFoundException("Property not found, id=" + propertyId);
                 }
         );
         // update listing status
@@ -139,7 +140,7 @@ public class PropertyServiceImpl implements PropertyService {
         Property existingProperty = propertyRepository.findById(propertyId).orElseThrow(
                 () -> {
                     LOG.info("Property {} not found", propertyId);
-                    return new RuntimeException("Property not found, id=" + propertyId);
+                    return new NotFoundException("Property not found, id=" + propertyId);
                 }
         );
         // update listing status
