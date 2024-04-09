@@ -2,10 +2,7 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
-import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
-import miu.ea.realestateapimonolithic.dto.AgentReviewPreviewDto;
-import miu.ea.realestateapimonolithic.dto.ApiResponse;
-import miu.ea.realestateapimonolithic.dto.PropertyDto;
+import miu.ea.realestateapimonolithic.dto.*;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
@@ -58,14 +55,14 @@ public class UserController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<List<AgentReviewPreviewDto>> getAllAgentReview(){
-        List<AgentReviewPreviewDto> agentReviews = agentReviewService.getAllAgentReview();
+    public ResponseEntity<List<AgentReviewDto>> getAllAgentReview(){
+        List<AgentReviewDto> agentReviews = agentReviewService.getAllAgentReview();
         return new ResponseEntity<>(agentReviews, HttpStatus.OK);
     }
 
     @GetMapping("/reviews/{agentId}")
-    public ResponseEntity<List<AgentReviewPreviewDto>> getAgentReviewById(@PathVariable Long agentId){
-        List<AgentReviewPreviewDto> agentReviews = agentReviewService.getAgentReviewsByAgentId(agentId);
+    public ResponseEntity<List<AgentReviewDto>> getAgentReviewById(@PathVariable Long agentId){
+        List<AgentReviewDto> agentReviews = agentReviewService.getAgentReviewsByAgentId(agentId);
         return new ResponseEntity<>(agentReviews,HttpStatus.OK);
     }
 
