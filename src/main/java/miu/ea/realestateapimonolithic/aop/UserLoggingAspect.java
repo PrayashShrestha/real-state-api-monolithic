@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class UserLoggingAspect {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserLoggingAspect.class);
 
     @Autowired
     private ObjectMapper mapper;
@@ -32,9 +32,9 @@ public class UserLoggingAspect {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            logger.info("started ==> method(s): {}, arguments: {}, timestamp:{}", signature, mapper.writeValueAsString(arg), timestamp);
+            LOGGER.info("started ==> method(s): {}, arguments: {}, timestamp:{}", signature, mapper.writeValueAsString(arg), timestamp);
         } catch (JsonProcessingException e){
-            logger.error("Error while converting", e);
+            LOGGER.error("Error while converting", e);
         }
     }
 
@@ -45,9 +45,9 @@ public class UserLoggingAspect {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            logger.info("Error on ==> method(s): {}, arguments: {}, exception details: {}, timestamp: {}", signature, mapper.writeValueAsString(arg), exception,timestamp);
+            LOGGER.info("Error on ==> method(s): {}, arguments: {}, exception details: {}, timestamp: {}", signature, mapper.writeValueAsString(arg), exception,timestamp);
         } catch (JsonProcessingException e){
-            logger.error("Error while converting", e);
+            LOGGER.error("Error while converting", e);
         }
 
     }
@@ -58,12 +58,10 @@ public class UserLoggingAspect {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            logger.info("==> method(s): {} executed, with result: {}, on timestamp: {}", signature, mapper.writeValueAsString(result),timestamp);
+            LOGGER.info("==> method(s): {} executed, with result: {}, on timestamp: {}", signature, mapper.writeValueAsString(result),timestamp);
         } catch (JsonProcessingException e) {
-            logger.error("Error while converting", e);
+            LOGGER.error("Error while converting", e);
         }
     }
-
-
 
 }
