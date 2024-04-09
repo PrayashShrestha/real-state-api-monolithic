@@ -20,6 +20,8 @@ public class Agent extends User {
     private String qualification;
     private String language;
 
+    private double averageRating;
+
     @JsonManagedReference(value = "agent-review")
     @BatchSize(size = 10)
     @OneToMany(mappedBy = "agent")
