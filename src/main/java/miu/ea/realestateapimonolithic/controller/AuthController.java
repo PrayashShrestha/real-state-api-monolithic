@@ -3,6 +3,7 @@ package miu.ea.realestateapimonolithic.controller;
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
 import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
+import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
 import miu.ea.realestateapimonolithic.service.UserService;
@@ -18,8 +19,8 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping(Constant.LOGIN_URL)
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest req) {
-        return ResponseEntity.ok(userService.login(req));
+    public ApiResponse<?> login(@RequestBody LoginRequest req) {
+        return userService.login(req);
     }
 
     @PostMapping(Constant.SIGNUP_URL)
