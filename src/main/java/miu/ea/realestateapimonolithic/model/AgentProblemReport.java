@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import miu.ea.realestateapimonolithic.common.ProblemEnum;
+import miu.ea.realestateapimonolithic.common.ProblemReportStatusEnum;
+import miu.ea.realestateapimonolithic.common.ProblemTypeEnum;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,13 +19,18 @@ public class AgentProblemReport {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ProblemEnum problem;
+    private ProblemTypeEnum problemType;
 
+    @Column(length = 2000)
     private String details;
 
     @ManyToOne
-    private Agent agent;
+    private User agent;
     @ManyToOne
     private User reporter;
 
+    @Enumerated(EnumType.STRING)
+    private ProblemReportStatusEnum status;
+
+    private LocalDateTime reportDate;
 }
