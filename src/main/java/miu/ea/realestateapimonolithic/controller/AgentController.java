@@ -15,13 +15,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgentController {
 
-    private final AgentService agentService;
-
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<AgentReviewDto>> getAllAgentReview(@PathVariable Long id){
-        List<AgentReviewDto> agentReviews = agentService.getAllAgentReview(id);
-        return new ResponseEntity<>(agentReviews, HttpStatus.OK);
-    }
-
-
 }
