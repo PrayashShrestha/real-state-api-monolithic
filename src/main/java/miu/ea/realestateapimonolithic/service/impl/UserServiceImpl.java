@@ -9,6 +9,7 @@ import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.InvalidInputException;
+import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.UserMapper;
 import miu.ea.realestateapimonolithic.model.*;
 import miu.ea.realestateapimonolithic.repository.AgentRepository;
@@ -105,5 +106,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+    }
+
+    public void activateUser(long id) {
+        User existingUser = userRepository.findById(id).orElseThrow(
+                () -> {
+                    LOG.info("User {} not found", id);
+                    return new NotFoundException("User not found, id=" + id);
+                }
+        );
+        // update user status
+        existingUser.setStatus(UserStatusEnum.ACTIVE);
+        userRepository.save(existingUser);
+    }
+
+    public void deactivateUser(long id) {
+        User existingUser = userRepository.findById(id).orElseThrow(
+                () -> {
+                    LOG.info("User {} not found", id);
+                    return new NotFoundException("User not found, id=" + id);
+                }
+        );
+        // update user status
+        existingUser.setStatus(UserStatusEnum.DEACTIVE);
+        userRepository.save(existingUser);
     }
 }
