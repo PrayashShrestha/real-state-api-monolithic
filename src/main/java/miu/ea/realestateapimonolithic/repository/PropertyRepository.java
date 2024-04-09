@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
+    List<Property> findPropertyByListingStatus(ListingStatusEnum listingType);
 
     @Query("Select p from Property p join p.user u where u.id= :userId")
     List<Property> findAllByUser(Long userId);
@@ -17,5 +18,4 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("Select p from Property p join p.user u where u.id= :userId and p.listingType = :listingType")
     List<Property> findAllByUserAndListingStatus(Long userId, ListingStatusEnum listingType);
 
-    List<Property> findAllByListingStatus(ListingStatusEnum listingType);
 }

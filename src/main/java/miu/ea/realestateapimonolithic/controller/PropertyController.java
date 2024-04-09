@@ -37,7 +37,7 @@ public class PropertyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePropertyById(@PathVariable Long id) throws PropertyException {
+    public ResponseEntity<String> deletePropertyById(@PathVariable Long id){
         propertyService.deleteById(id);
         return new ResponseEntity<>("Property Deleted Successfully", HttpStatus.OK);
     }
