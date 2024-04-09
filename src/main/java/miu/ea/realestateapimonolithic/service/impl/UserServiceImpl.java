@@ -71,8 +71,7 @@ public class UserServiceImpl implements UserService {
             BeanUtils.copyProperties(user, buyer);
             // set default value for preference
             BuyerPreference preference = new BuyerPreference();
-            preference.setPropertyType(
-              .HOUSE);
+            preference.setPropertyType(PropertyTypeEnum.HOUSE);
             buyer.setPreference(preference);
             buyerRepository.save(buyer);
         } else if (role.getRole() == RoleEnum.AGENT) {
