@@ -2,10 +2,10 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
+import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.AgentReviewPreviewDto;
 import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
-import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
@@ -25,17 +25,17 @@ public class UserController {
     private final PropertyService propertyService;
     private final AgentReviewService agentReviewService;
 
-    @PostMapping
-    public void saveUser(@RequestBody UserDto user) {
-         userService.saveUser(user);
-    }
+    // move to AuthController
+//    @PostMapping
+//    public void saveUser(@RequestBody AccountRegistrationRequest user) {
+//         userService.saveUser(user);
+//    }
 
     @GetMapping("/{userId}/property")
     public ResponseEntity<List<PropertyDto>> getPropertyByUser(@PathVariable long userId){
         List<PropertyDto> properties = propertyService.findAllByUserAndListingStatus(userId);
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
-
 
     @GetMapping("/{id}")
     public User findUser(@PathVariable long id) {
