@@ -23,12 +23,6 @@ public class SearchController {
     public SearchResponse searchProperty(@RequestBody PropertySearchRequest searchRequest) {
         PageRequest pageRequest = PageRequest.of(searchRequest.getPageNumber()-1, searchRequest.getPageSize());
 
-        Page<Property> list = propertyService.search(searchRequest, pageRequest);
-        return SearchResponse.builder()
-                .success(true)
-                .data(list.getContent())
-                .totalPages(list.getTotalPages())
-                .totalElements(list.getTotalElements())
-                .build();
+        return propertyService.search(searchRequest, pageRequest);
     }
 }

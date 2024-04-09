@@ -3,6 +3,7 @@ package miu.ea.realestateapimonolithic.service;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
+import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.model.Property;
 import miu.ea.realestateapimonolithic.model.Role;
@@ -32,5 +33,5 @@ public interface PropertyService {
     void approveProperty(Long propertyId);
     void rejectProperty(Long propertyId);
 
-    Page<Property> search(PropertySearchRequest propertySearchRequest, Pageable pageable);
+    SearchResponse search(PropertySearchRequest propertySearchRequest, Pageable pageable);
 }
