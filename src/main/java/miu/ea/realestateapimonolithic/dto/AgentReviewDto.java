@@ -13,6 +13,6 @@ public class AgentReviewDto {
     private long id;
     private String comment;
     private int rating;
-    private Agent agent;
-    private User reviewer;
+    private UserDto agent;
+    private UserDto reviewer;
 }
