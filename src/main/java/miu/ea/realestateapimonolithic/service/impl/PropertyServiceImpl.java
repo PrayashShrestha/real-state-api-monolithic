@@ -5,6 +5,7 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
+import miu.ea.realestateapimonolithic.exception.NotAuthorizedException;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.PropertyMapper;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +35,21 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void save(PropertyDto propertyDto) {
-        Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
-        propertyRepository.save(property);
+        Long userId = propertyDto.getUser().getId();
+        Optional<User> user= userRepository.findById(userId);
+        if(user.isPresent()){
+            RoleEnum role = user.get().getRole().getRole();
+            if(role == RoleEnum.AGENT || role == RoleEnum.SELLER){
+                Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
+                property.setUser(user.get());
+                propertyRepository.save(property);
+            }else {
+                throw new NotAuthorizedException("Not Authorized");
+            }
+        }
+        else {
+            throw new UserException("User Not Found");
+        }
     }
 
     @Override
@@ -71,16 +86,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void deleteById(Long id) {
-        if(propertyRepository.findById(id).isPresent()){
-            propertyRepository.deleteById(id);
-        }else {
-            try {
-                throw new PropertyException("Property Not Found");
-            } catch (PropertyException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
+        propertyRepository.findById(id).orElseThrow(() -> new PropertyException("Property Not Found"));
     }
 
     @Override
@@ -94,7 +100,7 @@ public class PropertyServiceImpl implements PropertyService {
     public List<PropertyDto> findAllByListingStatus() {
         return propertyRepository.findAllByListingStatus(ListingStatusEnum.APPROVED)
                 .stream()
-                .map((PropertyMapper.MAPPER::mapToPropertyDto))
+                .map(PropertyMapper.MAPPER::mapToPropertyDto)
                 .collect(Collectors.toList());
     }
 
@@ -104,11 +110,8 @@ public class PropertyServiceImpl implements PropertyService {
             Property p = propertyRepository.findById(id).get();
             return PropertyMapper.MAPPER.mapToPropertyDto(p);
         } else {
-            try {
                 throw new PropertyException("Property Doesn't Exist");
-            } catch (PropertyException e) {
-                throw new RuntimeException(e);
-            }
+
         }
     }
 

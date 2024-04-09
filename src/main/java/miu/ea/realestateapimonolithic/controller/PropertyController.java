@@ -31,13 +31,13 @@ public class PropertyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PropertyDto> getAllPropertyByUser(@PathVariable Long id) throws PropertyException {
+    public ResponseEntity<PropertyDto> getAllPropertyByUser(@PathVariable Long id) {
         PropertyDto property = propertyService.findById(id);
         return new ResponseEntity<>(property, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePropertyById(@PathVariable Long id) throws PropertyException {
+    public ResponseEntity<String> deletePropertyById(@PathVariable Long id) {
         propertyService.deleteById(id);
         return new ResponseEntity<>("Property Deleted Successfully", HttpStatus.OK);
     }
