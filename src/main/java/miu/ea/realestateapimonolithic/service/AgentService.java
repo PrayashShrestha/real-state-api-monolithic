@@ -15,6 +15,7 @@ public interface AgentService {
 
     void addAgentReview(AgentReviewDto agentReviewDto);
     List<AgentReviewDto> getAllAgentReview(long id);
+
     void addLanguages(Long id, List<String> languages);
 
     void addQualification(Long id, List<String> qualifications);
