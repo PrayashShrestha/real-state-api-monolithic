@@ -1,4 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
+    <!--Local-->
+    <property name="LOG_FOLDER" value="${user.dir}/logs" />
 
     <appender name = "myConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -10,10 +14,10 @@
 
     <appender name = "myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>
-            logs/userLogger.log
+            ${LOG_FOLDER}/activityLogs.log
         </file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/userLogger-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_FOLDER}/activityLogs-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
             <maxFileSize>500MB</maxFileSize>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -28,6 +32,5 @@
         <appender-ref ref="myConsoleAppender" />
         <appender-ref ref="myFileAppender" />
     </root>
-
 
 </configuration>

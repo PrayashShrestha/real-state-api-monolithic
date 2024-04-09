@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 @Aspect
 @Component
 public class UserLoggingAspect {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLoggingAspect.class);
 
     @Autowired
@@ -27,40 +26,46 @@ public class UserLoggingAspect {
 
     @Before("allLogger()")
     public void logMethod(JoinPoint joinPoint) {
-        String signature = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
         Object [] arg = joinPoint.getArgs();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            LOGGER.info("started ==> method(s): {}, arguments: {}, timestamp:{}", signature, mapper.writeValueAsString(arg), timestamp);
+            LOGGER.info("Started ==> Method(s): {}, Arguments: {}, Timestamp:{}",
+                    className + "." + methodName, mapper.writeValueAsString(arg), timestamp);
         } catch (JsonProcessingException e){
-            LOGGER.error("Error while converting", e);
+            LOGGER.error("Error while processing", e);
         }
     }
 
     @AfterThrowing(pointcut="allLogger()", throwing = "exception")
     public void logMethodAfterError(JoinPoint joinPoint, RuntimeException exception){
-        String signature = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
         Object [] arg = joinPoint.getArgs();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            LOGGER.info("Error on ==> method(s): {}, arguments: {}, exception details: {}, timestamp: {}", signature, mapper.writeValueAsString(arg), exception,timestamp);
+            LOGGER.info("Error on ==> Method(s): {}, Arguments: {}, Exception details: {}, Timestamp: {}",
+                    className + "." + methodName, mapper.writeValueAsString(arg), exception, timestamp);
         } catch (JsonProcessingException e){
-            LOGGER.error("Error while converting", e);
+            LOGGER.error("Error while processing", e);
         }
 
     }
 
     @AfterReturning(pointcut="allLogger()", returning = "result")
     public void logMethodAfterReturning(JoinPoint joinPoint, Object result){
-        String signature = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         try {
-            LOGGER.info("==> method(s): {} executed, with result: {}, on timestamp: {}", signature, mapper.writeValueAsString(result),timestamp);
+            LOGGER.info("==> Method(s): {} executed, with result: {}, on timestamp: {}",
+                    className + "." + methodName, mapper.writeValueAsString(result), timestamp);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Error while converting", e);
+            LOGGER.error("Error while processing", e);
         }
     }
 
