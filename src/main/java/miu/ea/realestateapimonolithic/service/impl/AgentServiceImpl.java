@@ -18,29 +18,4 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AgentServiceImpl implements AgentService {
 
-    private final AgentRepository agentRepository;
-    private final AgentReviewRepository agentReviewRepository;
-    @Override
-    public void addAgentReview(AgentReviewDto agentReviewDto) {
-        AgentReview agentReview = AgentReviewMapper.MAPPER.mapToAgentReview(agentReviewDto);
-        agentReviewRepository.save(agentReview);
-    }
-
-    @Override
-    public List<AgentReviewDto> getAllAgentReview(long id) {
-        if(agentRepository.findById(id).isPresent()){
-            Agent agent = agentRepository.findById(id).get();
-            return  agent.getReviews()
-                    .stream()
-                    .map(AgentReviewMapper.MAPPER::mapToAgentReviewDto)
-                    .collect(Collectors.toList());
-        }
-        else {
-            try {
-                throw new AgentException("Agent Not Found");
-            } catch (AgentException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }

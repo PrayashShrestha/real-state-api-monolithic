@@ -21,4 +21,5 @@ public class PropertyDto {
     private Integer numOfBathrooms;
     private ListingTypeEnum listingType;
     private ListingStatusEnum listingStatus;
+    private UserDto user;
 }

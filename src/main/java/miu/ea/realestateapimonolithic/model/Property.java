@@ -6,6 +6,8 @@ import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class Property {
     private ListingStatusEnum listingStatus;
 
 //    @JsonBackReference(value = "user-property")
+    @Fetch(FetchMode.JOIN)
     @ManyToOne
-//    @JoinColumn(name = "user-id")
     private User user;
 }
