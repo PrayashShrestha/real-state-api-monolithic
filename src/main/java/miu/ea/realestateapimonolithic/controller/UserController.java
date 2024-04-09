@@ -7,10 +7,10 @@ import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.UserService;
+import miu.ea.realestateapimonolithic.service.impl.PropertyPhotoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -79,5 +79,6 @@ public class UserController {
                 .success(true)
                 .build();
     }
+
 }
 

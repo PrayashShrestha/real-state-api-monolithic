@@ -4,6 +4,7 @@ import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
+import miu.ea.realestateapimonolithic.model.PropertyPhoto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -22,7 +23,9 @@ public interface PropertyService {
 
     List<PropertyDto> findAllByListingStatus();
 
-    PropertyDto findById(Long id) throws PropertyException;
+    PropertyDto findById(Long id);
+
+    void addPhotos(Long propertyId, PropertyPhoto propertyPhoto);
 
     void approveProperty(Long propertyId);
     void rejectProperty(Long propertyId);

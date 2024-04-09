@@ -10,6 +10,7 @@ import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
+import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
@@ -74,11 +75,11 @@ public class UserServiceImpl implements UserService {
               .HOUSE);
             buyer.setPreference(preference);
             buyerRepository.save(buyer);
-        } else if (userDto.getUserRole() == RoleEnum.AGENT) {
+        } else if (role.getRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
             agentRepository.save(agent);
-        } else if (userDto.getUserRole() == RoleEnum.SELLER) {
+        } else if (role.getRole() == RoleEnum.SELLER) {
             userRepository.save(user);
         }
     }

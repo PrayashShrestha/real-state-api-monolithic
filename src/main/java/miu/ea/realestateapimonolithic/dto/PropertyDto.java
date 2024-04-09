@@ -5,6 +5,8 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -22,4 +24,5 @@ public class PropertyDto {
     private ListingTypeEnum listingType;
     private ListingStatusEnum listingStatus;
     private UserDto user;
+    private List<PropertyPhotoDto> photos;
 }
