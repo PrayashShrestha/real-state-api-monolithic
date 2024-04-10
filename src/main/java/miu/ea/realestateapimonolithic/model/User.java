@@ -31,6 +31,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
+    private LocalDateTime createDate;
     private int failedAttempt;
     private LocalDateTime lockTime;
 }
