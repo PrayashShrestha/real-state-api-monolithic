@@ -1,16 +1,13 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import miu.ea.realestateapimonolithic.common.MessageStatusEnum;
 import miu.ea.realestateapimonolithic.common.ProblemReportStatusEnum;
 import miu.ea.realestateapimonolithic.dto.AgentProblemReportDto;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.mapper.AgentProblemReportMapper;
 import miu.ea.realestateapimonolithic.model.AgentProblemReport;
-import miu.ea.realestateapimonolithic.model.Message;
 import miu.ea.realestateapimonolithic.repository.AgentProblemReportRepository;
 import miu.ea.realestateapimonolithic.service.AgentProblemReportService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

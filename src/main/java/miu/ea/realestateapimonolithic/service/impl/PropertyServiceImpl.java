@@ -22,7 +22,6 @@ import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

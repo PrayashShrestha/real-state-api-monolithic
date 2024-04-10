@@ -1,6 +1,5 @@
 package miu.ea.realestateapimonolithic.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

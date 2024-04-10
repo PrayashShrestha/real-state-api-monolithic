@@ -3,7 +3,6 @@ package miu.ea.realestateapimonolithic.service;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
-import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.model.PropertyPhoto;
 import org.springframework.data.domain.Pageable;
 

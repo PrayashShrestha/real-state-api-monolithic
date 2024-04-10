@@ -3,15 +3,11 @@ package miu.ea.realestateapimonolithic.service.impl;
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.MessageStatusEnum;
 import miu.ea.realestateapimonolithic.dto.MessageDto;
-import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.mapper.MessageMapper;
 import miu.ea.realestateapimonolithic.model.Message;
-import miu.ea.realestateapimonolithic.model.Property;
-import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.repository.MessageRepository;
 import miu.ea.realestateapimonolithic.service.MessageService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -21,4 +21,7 @@ public class Buyer extends User {
             inverseJoinColumns = @JoinColumn(name = "property-id")
     )
     private List<Property> favouriteProperties;
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private List<SearchCondition> searchConditions;
 }

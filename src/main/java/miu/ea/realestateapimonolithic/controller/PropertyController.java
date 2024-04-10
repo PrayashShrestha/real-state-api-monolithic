@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertyPhotoDto;
-import miu.ea.realestateapimonolithic.exception.PropertyException;
-import miu.ea.realestateapimonolithic.model.Property;
 import miu.ea.realestateapimonolithic.service.PropertyPhotoService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.springframework.http.HttpStatus;

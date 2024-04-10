@@ -2,7 +2,6 @@ package miu.ea.realestateapimonolithic.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.congifuration.CloudinaryConfigProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
