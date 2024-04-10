@@ -13,4 +13,6 @@ public interface BuyerService {
     void addFavouriteProperty(Long buyerId, PropertyDto propertyDto);
 
     List<PropertyDto> viewFavouriteProperties(Long buyerId);
+
+    void removeFavouriteProperty(Long buyerId, PropertyDto propertyDto);
 }

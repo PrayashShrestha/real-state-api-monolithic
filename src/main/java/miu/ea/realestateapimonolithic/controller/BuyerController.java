@@ -50,6 +50,12 @@ public class BuyerController {
         return new ResponseEntity<>("Property added to favourites", HttpStatus.OK);
     }
 
+    @PostMapping("{buyerId}/removeFavorites")
+    public ResponseEntity<String> removeFavoriteProperty(@PathVariable Long buyerId, @RequestBody PropertyDto propertyDto){
+        buyerService.removeFavouriteProperty(buyerId, propertyDto);
+        return new ResponseEntity<>("Property removed from favourites", HttpStatus.OK);
+    }
+
     @GetMapping("{buyerId}/favorites")
     public ResponseEntity<List<PropertyDto>> getFavoriteProperties(@PathVariable Long buyerId){
         List<PropertyDto> favorites = buyerService.viewFavouriteProperties(buyerId);

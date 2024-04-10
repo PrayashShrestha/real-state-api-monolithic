@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({PropertyException.class, UserException.class, AgentException.class, NotFoundException.class})
+    @ExceptionHandler({PropertyException.class, UserException.class, AgentException.class})
     public <T extends Exception> ResponseEntity<ErrorDetails> handleIdNotFoundException(T exception,
                                                                                         WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(
@@ -48,6 +48,18 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleNotFoundException (NotFoundException exception, WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                ErrorCode.NOT_FOUND
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
 }
