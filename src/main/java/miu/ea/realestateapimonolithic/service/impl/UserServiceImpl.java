@@ -19,6 +19,7 @@ import miu.ea.realestateapimonolithic.repository.RoleRepository;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
 import miu.ea.realestateapimonolithic.service.ProfilePhotoService;
 import miu.ea.realestateapimonolithic.service.UserService;
+import miu.ea.realestateapimonolithic.utility.RandomPasswordGenerator;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -297,6 +298,18 @@ public class UserServiceImpl implements UserService {
         // update profile review to True
         existingUser.setProfileInReview(false);
         userRepository.save(existingUser);
+    }
+
+    @Override
+    public String resetUserPassword(long userId) {
+        String newPassword = RandomPasswordGenerator.genPassword(10);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not Found."));
+
+        String encodedNewPassword = securityConfig.passwordEncoder().encode(newPassword);
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+        return newPassword;
     }
 
 }

@@ -21,4 +21,6 @@ public interface UserService {
 
     ApiResponse<?> login(LoginRequest req);
     void approveProfile(long id);
+
+    String resetUserPassword(long userId);
 }
