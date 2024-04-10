@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Agent extends User {
-    @ElementCollection
-    @Column(columnDefinition = "String[]")
-    private List<String> qualifications;
+    @JsonManagedReference(value = "agent-language")
+    @OneToMany(mappedBy = "agent")
+    private List<Qualification> qualifications = new ArrayList<>();
 
-    @ElementCollection
-    @Column(columnDefinition = "String[]")
-    private List<String> languages;
+    @JsonManagedReference(value = "agent-qualification")
+    @OneToMany(mappedBy = "agent")
+    private List<Language> languages = new ArrayList<>();
 
     private Double averageRating;
 

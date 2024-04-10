@@ -10,6 +10,7 @@ import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
+import miu.ea.realestateapimonolithic.dto.UserResponseDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
@@ -26,10 +27,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.UUID;
 
 @Service
@@ -40,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final BuyerRepository buyerRepository;
     private final AgentRepository agentRepository;
     private final SecurityConfig securityConfig;
+    private final UserMapper userMapper;
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -78,6 +83,9 @@ public class UserServiceImpl implements UserService {
         } else if (role.getRole() == RoleEnum.AGENT) {
             Agent agent = new Agent();
             BeanUtils.copyProperties(user, agent);
+            agent.setLanguages(List.of());
+            agent.setQualifications(List.of());
+//            agent.setReviews(List.of());
             agentRepository.save(agent);
         } else if (role.getRole() == RoleEnum.SELLER) {
             userRepository.save(user);
@@ -120,8 +128,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDto> findAllUsers() {
+        List<User> users = userRepository.findAllUsersWithRoles();
+        return users.stream().map(userMapper::childTypeMapToUser).collect(Collectors.toList());
     }
 
     @Override
