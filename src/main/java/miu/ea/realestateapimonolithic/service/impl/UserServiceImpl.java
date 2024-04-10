@@ -6,11 +6,7 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 import miu.ea.realestateapimonolithic.common.RoleEnum;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.congifuration.SecurityConfig;
-import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
-import miu.ea.realestateapimonolithic.dto.ApiResponse;
-import miu.ea.realestateapimonolithic.dto.LoginRequest;
-import miu.ea.realestateapimonolithic.dto.TokenResponse;
-import miu.ea.realestateapimonolithic.dto.UserResponseDto;
+import miu.ea.realestateapimonolithic.dto.*;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
@@ -21,12 +17,14 @@ import miu.ea.realestateapimonolithic.repository.AgentRepository;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
 import miu.ea.realestateapimonolithic.repository.RoleRepository;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
+import miu.ea.realestateapimonolithic.service.ProfilePhotoService;
 import miu.ea.realestateapimonolithic.service.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final AgentRepository agentRepository;
     private final SecurityConfig securityConfig;
     private final UserMapper userMapper;
+    private final ProfilePhotoService profilePhotoService;
 
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -120,23 +119,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(User user){
+        userRepository.save(user);
+    }
+
+    @Override
     public List<UserResponseDto> findAllUsers() {
         List<User> users = userRepository.findAllUsersWithRoles();
         return users.stream().map(userMapper::childTypeMapToUser).collect(Collectors.toList());
     }
 
     @Override
-    public void updateUser(long id, User user) {
+    public void updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto) {
         Optional<User> retrievedUser = userRepository.findById(id);
         if(retrievedUser.isEmpty()){
             throw new NotFoundException("User not Found.");
         }
+
         User updatedUser = retrievedUser.get();
         updatedUser.setName(user.getName());
         updatedUser.setTel(user.getTel());
         updatedUser.setLocation(user.getLocation());
         updatedUser.setUpdateDate(LocalDateTime.now());
         updatedUser.setProfileInReview(true);
+
+        String userPhotoUrl = profilePhotoService.saveProfilePhoto(profilePhoto, updatedUser);
+        updatedUser.setProfilePhoto(userPhotoUrl);
         userRepository.save(updatedUser);
     }
 
