@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponseDto> findAllUser(){
-        return userService.findAllUsers();
+    public List<UserResponseDto> findAllUser(@RequestParam int start, @RequestParam int pageSize){
+        return userService.findAllUsers(start, pageSize);
     }
 
     @PutMapping("/{id}")

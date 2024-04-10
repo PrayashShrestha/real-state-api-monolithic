@@ -12,7 +12,7 @@ public interface UserService {
     void saveAdmin(AccountRegistrationRequest user);
 
     void save(User user);
-    List<UserResponseDto> findAllUsers();
+    List<UserResponseDto> findAllUsers(int start, int pageSize);
     void updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto);
 
     void updatePassword(long id, String oldPassword, String newPassword);

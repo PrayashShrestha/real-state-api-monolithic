@@ -22,6 +22,9 @@ import miu.ea.realestateapimonolithic.service.UserService;
 import miu.ea.realestateapimonolithic.utility.RandomPasswordGenerator;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,8 +128,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDto> findAllUsers() {
-        List<User> users = userRepository.findAllUsersWithRoles();
+    public List<UserResponseDto> findAllUsers(int start, int pageSize) {
+        Pageable pageable = PageRequest.of(start, pageSize, Sort.by("id"));
+        List<User> users = userRepository.findAllByStatus(UserStatusEnum.ACTIVE, pageable);
         return users.stream().map(userMapper::childTypeMapToUser).collect(Collectors.toList());
     }
 

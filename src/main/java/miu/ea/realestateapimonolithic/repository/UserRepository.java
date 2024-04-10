@@ -1,6 +1,8 @@
 package miu.ea.realestateapimonolithic.repository;
 
+import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.model.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN FETCH u.role")
     List<User> findAllUsersWithRoles();
 
-
+    List<User> findAllByStatus(UserStatusEnum status, Pageable pageable);
 
     @Query("UPDATE User u SET u.failedAttempt = ?1 WHERE u.email = ?2")
     @Modifying
