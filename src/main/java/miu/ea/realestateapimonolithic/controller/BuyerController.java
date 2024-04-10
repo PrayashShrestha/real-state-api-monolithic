@@ -47,13 +47,6 @@ public class BuyerController {
         return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/{agentId}/addReview")
-    public ResponseEntity<String> addAgentReview(@PathVariable Long agentId,
-                                                 @RequestBody AgentReviewDto agentReviewDto){
-        agentReviewService.saveAgentReview(agentReviewDto);
-        return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
-    }
-
     @PostMapping("{buyerId}/favorites")
     public ResponseEntity<String> addFavoriteProperty(@PathVariable Long buyerId, @RequestBody PropertyDto propertyDto){
         buyerService.addFavouriteProperty(buyerId, propertyDto);
