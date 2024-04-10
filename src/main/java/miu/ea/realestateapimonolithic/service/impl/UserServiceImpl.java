@@ -122,15 +122,6 @@ public class UserServiceImpl implements UserService {
     public void save(User user){
         userRepository.save(user);
     }
-    @Override
-    public User findUser(long id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if(user.isEmpty()){
-            throw new NotFoundException("User not Found.");
-        }
-        return user.get();
-    }
 
     @Override
     public List<UserResponseDto> findAllUsers() {
@@ -139,7 +130,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto) {
+    public void updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto) {
         Optional<User> retrievedUser = userRepository.findById(id);
         if(retrievedUser.isEmpty()){
             throw new NotFoundException("User not Found.");

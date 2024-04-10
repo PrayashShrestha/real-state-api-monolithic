@@ -13,7 +13,7 @@ public interface UserService {
 
     void save(User user);
     List<UserResponseDto> findAllUsers();
-    User updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto);
+    void updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto);
 
     void updatePassword(long id, String oldPassword, String newPassword);
     void activateUser(long id);
