@@ -7,17 +7,13 @@ import lombok.Setter;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.model.Role;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDto {
-        private long id;
-        private String email;
-        private String name;
-        private String tel;
-        private String location;
-        private String profilePhoto;
-        private Role role;
-        private UserStatusEnum status;
+public class UserUpdateDto {
+    private String name;
+    private String tel;
+    private String location;
 }

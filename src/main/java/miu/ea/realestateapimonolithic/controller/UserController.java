@@ -10,6 +10,8 @@ import miu.ea.realestateapimonolithic.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -33,8 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable long id, @RequestBody User user){
-        userService.updateUser(id, user);
+    public ResponseEntity<String> updateUser(@PathVariable long id, @RequestPart UserUpdateDto user, @RequestPart MultipartFile profilePhoto){
+        userService.updateUser(id, user, profilePhoto);
         return new ResponseEntity<>("User profile updated successfully.", HttpStatus.OK);
     }
 

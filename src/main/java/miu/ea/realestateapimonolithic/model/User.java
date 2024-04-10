@@ -24,7 +24,9 @@ public class User {
     private String tel;
     private String location;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String profilePhoto;
+
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 

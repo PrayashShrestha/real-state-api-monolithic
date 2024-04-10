@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.UserResponseDto;
+import miu.ea.realestateapimonolithic.dto.UserUpdateDto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
 import org.hibernate.Hibernate;
