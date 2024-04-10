@@ -22,6 +22,7 @@ public class AdminController {
         propertyService.approveProperty(propertyId);
         return ApiResponse.builder()
                 .success(true)
+                .message("Property has been approved.")
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class AdminController {
         propertyService.rejectProperty(propertyId);
         return ApiResponse.builder()
                 .success(true)
+                .message("Property has been rejected.")
                 .build();
     }
 
@@ -38,6 +40,16 @@ public class AdminController {
         userService.activateUser(userId);
         return ApiResponse.builder()
                 .success(true)
+                .message("User has been activated.")
+                .build();
+    }
+
+    @GetMapping("/user/{userId}/profile/approve")
+    public ApiResponse<?> approveUserProfile(@PathVariable Long userId) {
+        userService.approveProfile(userId);
+        return ApiResponse.builder()
+                .success(true)
+                .message("User profile has been approved.")
                 .build();
     }
 }

@@ -13,7 +13,6 @@ public interface UserService {
 
     void saveUser(AccountRegistrationRequest user);
     void saveAdmin(AccountRegistrationRequest user);
-    User findUser(long id);
     List<UserResponseDto> findAllUsers();
     void updateUser(long id, User user);
 
@@ -22,4 +21,5 @@ public interface UserService {
     void deactivateUser(long id);
 
     ApiResponse<?> login(LoginRequest req);
+    void approveProfile(long id);
 }

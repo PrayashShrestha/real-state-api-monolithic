@@ -120,16 +120,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUser(long id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if(user.isEmpty()){
-            throw new NotFoundException("User not Found.");
-        }
-        return user.get();
-    }
-
-    @Override
     public List<UserResponseDto> findAllUsers() {
         List<User> users = userRepository.findAllUsersWithRoles();
         return users.stream().map(userMapper::childTypeMapToUser).collect(Collectors.toList());
@@ -145,7 +135,8 @@ public class UserServiceImpl implements UserService {
         updatedUser.setName(user.getName());
         updatedUser.setTel(user.getTel());
         updatedUser.setLocation(user.getLocation());
-
+        updatedUser.setUpdateDate(LocalDateTime.now());
+        updatedUser.setProfileInReview(true);
         userRepository.save(updatedUser);
     }
 
@@ -286,6 +277,18 @@ public class UserServiceImpl implements UserService {
     private TokenResponse createTokenResponse() {
         String token = UUID.randomUUID().toString(); // implement later
         return TokenResponse.builder().accessToken(token).expiresIn(Constant.TOKEN_EXPIRATION_DURATION).build();
+    }
+
+    public void approveProfile(long id) {
+        User existingUser = userRepository.findById(id).orElseThrow(
+                () -> {
+                    LOG.info("User {} not found", id);
+                    return new NotFoundException("User not found, id=" + id);
+                }
+        );
+        // update profile review to True
+        existingUser.setProfileInReview(false);
+        userRepository.save(existingUser);
     }
 
 }

@@ -32,6 +32,10 @@ public class User {
     private UserStatusEnum status;
 
     private LocalDateTime createDate;
+    private LocalDateTime updateDate;
+
+    private Boolean profileInReview;
+
     private int failedAttempt;
     private LocalDateTime lockTime;
 }
