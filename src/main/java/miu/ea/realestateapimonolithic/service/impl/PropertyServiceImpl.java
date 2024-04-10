@@ -80,6 +80,7 @@ public class PropertyServiceImpl implements PropertyService {
     public List<PropertyDto> findAll() {
         return propertyRepository.findAll()
                  .stream()
+                .filter(property -> !property.isDeleted())
                  .map(PropertyMapper.MAPPER::mapToPropertyDto)
                  .collect(Collectors.toList());
     }
@@ -97,6 +98,7 @@ public class PropertyServiceImpl implements PropertyService {
                 return this.findAllByListingStatus();
             }else{
                 return properties.stream()
+                        .filter(property -> !property.isDeleted())
                         .map(PropertyMapper.MAPPER::mapToPropertyDto)
                         .collect(Collectors.toList());
             }
@@ -110,20 +112,24 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void deleteById(Long id) {
-        propertyRepository.findById(id).orElseThrow(() -> new PropertyException("Property Not Found"));
+        Property property = propertyRepository.findById(id).orElseThrow(() -> new PropertyException("Property Not Found"));
+        property.setDeleted(Boolean.TRUE);
+        propertyRepository.save(property);
     }
 
     @Override
     public void delete(PropertyDto propertyDto) {
-        Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
-        propertyRepository.delete(property);
-
+        Long propertyId = propertyDto.getId();
+        Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not Found. Id:" + propertyId));
+        property.setDeleted(Boolean.TRUE);
+        propertyRepository.save(property);
     }
 
     @Override
     public List<PropertyDto> findAllByListingStatus() {
         return propertyRepository.findAllByListingStatus(ListingStatusEnum.APPROVED)
                 .stream()
+                .filter(property -> !property.isDeleted())
                 .map(PropertyMapper.MAPPER::mapToPropertyDto)
                 .collect(Collectors.toList());
     }
@@ -132,7 +138,11 @@ public class PropertyServiceImpl implements PropertyService {
     public PropertyDto findById(Long id) {
         if(propertyRepository.findById(id).isPresent()){
             Property p = propertyRepository.findById(id).get();
-            return PropertyMapper.MAPPER.mapToPropertyDto(p);
+            if(!p.isDeleted()){
+                return PropertyMapper.MAPPER.mapToPropertyDto(p);
+            }else{
+                throw new PropertyException("Property Doesn't Exist");
+            }
         } else {
                 throw new PropertyException("Property Doesn't Exist");
 
@@ -142,8 +152,12 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void updatePhotos(Long propertyId, PropertyPhoto propertyPhoto) {
         Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not found " + propertyId));
-        property.getPhotos().add(propertyPhoto);
-        propertyRepository.save(property);
+        if(!property.isDeleted()){
+            property.getPhotos().add(propertyPhoto);
+            propertyRepository.save(property);
+        }else {
+            throw new PropertyException("Property Doesn't exist");
+        }
     }
 
     @Override
@@ -198,6 +212,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<Property> properties = propertyRepository.findAllByUser(id);
         return properties.stream()
                 .filter(property -> property.getListingStatus() == ListingStatusEnum.APPROVED || property.getListingStatus() == ListingStatusEnum.IN_REVIEW)
+                .filter(property -> !property.isDeleted())
                 .map(PropertyMapper.MAPPER::mapToPropertyDto).collect(Collectors.toList());
     }
 
@@ -206,6 +221,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<Property> properties = propertyRepository.findAllByUser(id);
         return properties.stream()
                 .filter(property -> property.getListingStatus() == ListingStatusEnum.CLOSED)
+                .filter(property -> !property.isDeleted())
                 .map(PropertyMapper.MAPPER::mapToPropertyDto).collect(Collectors.toList());
     }
 

@@ -62,8 +62,9 @@ public class PropertyPhotoServiceImpl implements PropertyPhotoService {
     }
 
     @Override
-    public PropertyPhotoDto getOnePropertyPhoto(Long id) {
-        return null;
+    public PropertyPhotoDto getOnePropertyPhoto(Long photoId) {
+        PropertyPhoto propertyPhoto = propertyPhotoRepository.findById(photoId).orElseThrow(() -> new NotFoundException("Photo not found. Id:" + photoId));
+        return PropertyPhotoMapper.MAPPER.mapToPropertyPhotoDto(propertyPhoto);
     }
 
     @Override

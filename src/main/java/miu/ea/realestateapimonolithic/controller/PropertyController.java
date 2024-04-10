@@ -68,6 +68,12 @@ public class PropertyController {
         return new ResponseEntity<>(photos,HttpStatus.OK);
     }
 
+    @GetMapping("/photos/{propertyPhotoId}")
+    public ResponseEntity<PropertyPhotoDto> getOnePropertyPhoto(@PathVariable Long propertyPhotoId){
+        PropertyPhotoDto propertyPhotoDto = propertyPhotoService.getOnePropertyPhoto(propertyPhotoId);
+        return new ResponseEntity<>(propertyPhotoDto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/photos/{propertyPhototoId}")
     public ResponseEntity<String> deletePropertyPhoto(@PathVariable Long propertyPhototoId){
         propertyPhotoService.deletePropertyPhoto(propertyPhototoId);
