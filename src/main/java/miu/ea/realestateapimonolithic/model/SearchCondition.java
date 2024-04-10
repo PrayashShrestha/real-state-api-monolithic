@@ -25,9 +25,6 @@ public class SearchCondition {
     private Integer numOfBedrooms;
     private Integer numOfBathrooms;
 
-
-    private
-
     @PrePersist
     void prePersist(){
         if(minPrice == null){

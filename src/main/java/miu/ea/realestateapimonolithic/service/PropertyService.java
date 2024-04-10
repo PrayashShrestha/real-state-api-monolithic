@@ -30,4 +30,8 @@ public interface PropertyService {
     void rejectProperty(Long propertyId);
 
     SearchResponse search(PropertySearchRequest propertySearchRequest, Pageable pageable);
+
+    List<PropertyDto> findCurrentListing(Long userId);
+
+    List<PropertyDto> findPastListing(Long userId);
 }

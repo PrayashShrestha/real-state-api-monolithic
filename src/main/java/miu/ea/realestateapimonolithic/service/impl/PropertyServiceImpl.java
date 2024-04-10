@@ -174,6 +174,22 @@ public class PropertyServiceImpl implements PropertyService {
                 .build();
     }
 
+    @Override
+    public List<PropertyDto> findCurrentListing(Long id) {
+        List<Property> properties = propertyRepository.findAllByUser(id);
+        return properties.stream()
+                .filter(property -> property.getListingStatus() == ListingStatusEnum.APPROVED || property.getListingStatus() == ListingStatusEnum.IN_REVIEW)
+                .map(PropertyMapper.MAPPER::mapToPropertyDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PropertyDto> findPastListing(Long id) {
+        List<Property> properties = propertyRepository.findAllByUser(id);
+        return properties.stream()
+                .filter(property -> property.getListingStatus() == ListingStatusEnum.CLOSED)
+                .map(PropertyMapper.MAPPER::mapToPropertyDto).collect(Collectors.toList());
+    }
+
     private PropertyDto toDto(Property property) {
         PropertyDto propertyDto = new PropertyDto();
         BeanUtils.copyProperties(property, propertyDto);
