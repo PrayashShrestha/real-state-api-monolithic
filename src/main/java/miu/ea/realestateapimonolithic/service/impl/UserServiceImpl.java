@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
 
         String userPhotoUrl = profilePhotoService.saveProfilePhoto(profilePhoto, updatedUser);
         updatedUser.setProfilePhoto(userPhotoUrl);
-        userRepository.save(updatedUser);
+        return userRepository.save(updatedUser);
     }
 
     @Override
