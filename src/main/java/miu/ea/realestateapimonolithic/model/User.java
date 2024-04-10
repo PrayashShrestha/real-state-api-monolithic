@@ -24,7 +24,7 @@ public class User {
     private String tel;
     private String location;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
 

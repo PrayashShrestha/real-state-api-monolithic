@@ -14,8 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Agent extends User {
-    private String qualification;
-    private String language;
+    @JsonManagedReference(value = "agent-language")
+    @OneToMany(mappedBy = "agent")
+    private List<Qualification> qualifications = new ArrayList<>();
+
+    @JsonManagedReference(value = "agent-qualification")
+    @OneToMany(mappedBy = "agent")
+    private List<Language> languages = new ArrayList<>();
 
     private Double averageRating;
 
