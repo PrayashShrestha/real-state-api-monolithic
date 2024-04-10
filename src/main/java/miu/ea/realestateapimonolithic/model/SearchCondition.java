@@ -18,17 +18,18 @@ public class SearchCondition {
     private Long id;
 
     private String nameOfSearch;
-
     private Double minPrice;
-
     private Double maxPrice;
-
     private ListingTypeEnum listingTypeEnum;
-
     private String location;
+    private Integer numOfBedrooms;
+    private Integer numOfBathrooms;
+
+
+    private
 
     @PrePersist
-    public void prePersist(){
+    void prePersist(){
         if(minPrice == null){
             minPrice = 0.0;
         }

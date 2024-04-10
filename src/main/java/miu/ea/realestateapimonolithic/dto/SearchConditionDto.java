@@ -17,4 +17,6 @@ public class SearchConditionDto {
     private Double maxPrice;
     private ListingTypeEnum listingTypeEnum;
     private String location;
+    private Integer numOfBedrooms;
+    private Integer numOfBathrooms;
 }
