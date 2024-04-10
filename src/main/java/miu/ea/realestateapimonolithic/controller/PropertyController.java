@@ -32,19 +32,19 @@ public class PropertyController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<PropertyDto> getAllPropertyByUser(@PathVariable Long userId) {
         PropertyDto property = propertyService.findById(userId);
         return new ResponseEntity<>(property, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/currentListings")
+    @GetMapping("/user/{userId}/currentListings")
     public ResponseEntity<List<PropertyDto>> getCurrentListings(@PathVariable Long userId){
         List<PropertyDto> propertyDto = propertyService.findCurrentListing(userId);
         return new ResponseEntity<>(propertyDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/pastListings")
+    @GetMapping("/user/{userId}/pastListings")
     public ResponseEntity<List<PropertyDto>> getPastListings(@PathVariable Long userId){
         List<PropertyDto> propertyDto = propertyService.findPastListing(userId);
         return new ResponseEntity<>(propertyDto, HttpStatus.OK);

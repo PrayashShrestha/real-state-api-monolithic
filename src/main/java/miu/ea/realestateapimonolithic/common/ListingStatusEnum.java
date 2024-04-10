@@ -4,6 +4,7 @@ public enum ListingStatusEnum {
     IN_REVIEW("In Review"),
     APPROVED("Approved"),
     REJECTED("Rejected"),
+    DELETE("Delete"),
     CLOSED("Closed");
 
     private String status;
