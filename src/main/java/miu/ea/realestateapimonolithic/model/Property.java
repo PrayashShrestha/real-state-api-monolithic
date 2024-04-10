@@ -33,7 +33,7 @@ public class Property {
     private Integer numOfBathrooms;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
-    private List<PropertyPhoto> photos;
+    private List<PropertyPhoto> photos = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ListingTypeEnum listingType;
@@ -44,10 +44,16 @@ public class Property {
     private LocalDateTime listingDate;
     private LocalDateTime expiredDate;
 
-//    @JsonBackReference(value = "user-property")
+    private boolean deleted = Boolean.FALSE;
+
     @Fetch(FetchMode.JOIN)
     @ManyToOne
     private User user;
+
+
+
+
+
     public void addPropertyPhoto(PropertyPhoto propertyPhoto){
         photos = new ArrayList<>();
         this.photos.add(propertyPhoto);
