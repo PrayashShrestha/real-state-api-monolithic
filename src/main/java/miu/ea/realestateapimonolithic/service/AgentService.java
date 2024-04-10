@@ -13,9 +13,6 @@ import java.util.List;
 public interface AgentService {
     SearchResponse search(AgentSearchRequest searchRequest, Pageable pageable);
 
-    void addAgentReview(AgentReviewDto agentReviewDto);
-    List<AgentReviewDto> getAllAgentReview(long id);
-
     void addLanguages(Long id, List<String> languages);
 
     void addQualification(Long id, List<String> qualifications);

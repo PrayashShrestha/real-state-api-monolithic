@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 public class AgentServiceImpl implements AgentService {
     private final CustomAgentRepository customAgentRepository;
     private final AgentRepository agentRepository;
+    private final LanguageRepository languageRepository;
+    private final QualificationRepository qualificationRepository;
 
     @Override
     public SearchResponse search(AgentSearchRequest searchRequest, Pageable pageable) {
@@ -61,8 +63,7 @@ public class AgentServiceImpl implements AgentService {
         return agentDto;
     }
 
-    private final LanguageRepository languageRepository;
-    private final QualificationRepository qualificationRepository;
+
 
     @Override
     public void addLanguages(Long id, List<String> languages) {

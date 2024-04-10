@@ -210,23 +210,7 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
         // login successfully
-        if (user.getStatus() == UserStatusEnum.DEACTIVE) {
-            return ApiResponse.builder()
-                    .success(false)
-                    .message("Your account has been deactivated.")
-                    .build();
-        }
-        if (user.getStatus() == UserStatusEnum.REJECTED) {
-            return ApiResponse.builder()
-                    .success(false)
-                    .message("Your account has been rejected.")
-                    .build();
-        }
-        // login successfully
         if (securityConfig.passwordEncoder().matches(req.getPassword(), user.getPassword())) {
-            if (user.getFailedAttempt() > 0) {
-                resetFailedAttempt(user);
-            }
             if (user.getFailedAttempt() > 0) {
                 resetFailedAttempt(user);
             }
@@ -236,67 +220,6 @@ public class UserServiceImpl implements UserService {
                     .data(tokenResponse)
                     .build();
         } else {
-            if (user.getStatus() == UserStatusEnum.LOCKED) {
-                if (unlock(user)) {
-                    return ApiResponse.builder()
-                            .success(true)
-                            .message("Your account has been unlocked. Please try to login again.")
-                            .build();
-                } else {
-                    return ApiResponse.builder()
-                            .success(false)
-                            .message("Your account has been locked due to "
-                                    + Constant.MAX_LOGIN_FAILED_ATTEMPTS
-                                    + " failed attempts. Please try again.")
-                            .build();
-                }
-            } else {
-                if (user.getFailedAttempt() < Constant.MAX_LOGIN_FAILED_ATTEMPTS) {
-                    increaseFailedAttempt(user);
-                    return ApiResponse.builder()
-                            .success(false)
-                            .message("Incorrect email or password.")
-                            .build();
-                } else {
-                    lock(user);
-                    return ApiResponse.builder()
-                            .success(false)
-                            .message("Your account has been locked due to "
-                                    + Constant.MAX_LOGIN_FAILED_ATTEMPTS
-                                    + " failed attempts. Please try again.")
-                            .build();
-                }
-            }
-        }
-    }
-
-    private void increaseFailedAttempt(User user) {
-        int newFailAttempt = user.getFailedAttempt() + 1;
-        userRepository.updateFailedAttempt(newFailAttempt, user.getEmail());
-    }
-
-    private void lock(User user) {
-        user.setStatus(UserStatusEnum.LOCKED);
-        user.setLockTime(LocalDateTime.now());
-        userRepository.save(user);
-    }
-
-    private boolean unlock(User user) {
-        long lockTime = user.getLockTime().toInstant(ZoneOffset.UTC).toEpochMilli();
-        long currentTime = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
-
-        if (lockTime + Constant.LOCK_TIME_DURATION < currentTime) {
-            user.setStatus(UserStatusEnum.ACTIVE);
-            user.setLockTime(null);
-            user.setFailedAttempt(0);
-            userRepository.save(user);
-            return true;
-        }
-        return false;
-    }
-
-    public void resetFailedAttempt(User user) {
-        userRepository.updateFailedAttempt(0, user.getEmail());
             if (user.getStatus() == UserStatusEnum.LOCKED) {
                 if (unlock(user)) {
                     return ApiResponse.builder()
