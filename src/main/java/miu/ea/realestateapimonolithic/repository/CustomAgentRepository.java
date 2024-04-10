@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 public class CustomAgentRepository {
@@ -27,8 +26,8 @@ public class CustomAgentRepository {
                 .where(withStatus(UserStatusEnum.ACTIVE))
                 .and(joinReviews())
                 .and(nameLike(searchRequest.getName()))
-                .and(qualificationLike(searchRequest.getQualification()))
-                .and(languageLike(searchRequest.getLanguage()))
+                .and(joinQualifications(searchRequest.getQualification()))
+                .and(joinLanguages(searchRequest.getLanguage()))
                 .and(ratingGreaterThanEqual(searchRequest.getRating()))
                 .and(locationLike(searchRequest.getLocation()));
         return agentRepository.findAll(specs, pageable);
