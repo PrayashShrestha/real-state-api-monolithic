@@ -16,17 +16,20 @@ import miu.ea.realestateapimonolithic.model.Property;
 import miu.ea.realestateapimonolithic.model.PropertyPhoto;
 import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.repository.CustomPropertyRepository;
+import miu.ea.realestateapimonolithic.repository.PropertyPhotoRepository;
 import miu.ea.realestateapimonolithic.repository.PropertyRepository;
 import miu.ea.realestateapimonolithic.repository.UserRepository;
+import miu.ea.realestateapimonolithic.service.PropertyPhotoService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,9 +40,10 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final CustomPropertyRepository customPropertyRepository;
+    private final CloudinaryServiceImpl cloudinaryService;
 
     @Override
-    public void save(PropertyDto propertyDto) {
+    public void save(PropertyDto propertyDto, MultipartFile [] multipartFiles) {
         Long userId = propertyDto.getUser().getId();
         Optional<User> user= userRepository.findById(userId);
         if(user.isPresent()){
@@ -47,7 +51,21 @@ public class PropertyServiceImpl implements PropertyService {
             if(role == RoleEnum.AGENT || role == RoleEnum.SELLER){
                 Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
                 property.setUser(user.get());
-                propertyRepository.save(property);
+                for(MultipartFile photo: multipartFiles){
+                    try {
+                        Map clodinaryResult = cloudinaryService.upload(photo);
+                        PropertyPhoto propertyPhoto = new PropertyPhoto();
+                        propertyPhoto.setName((String) clodinaryResult.get("original_filename"));
+                        propertyPhoto.setImageUrl((String) clodinaryResult.get("url"));
+                        propertyPhoto.setImageId((String) clodinaryResult.get("public_id"));
+                        propertyPhoto.setProperty(property);
+                        property.addPropertyPhoto(propertyPhoto);
+                        propertyRepository.save(property);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
             }else {
                 throw new NotAuthorizedException("Not Authorized");
             }
@@ -56,6 +74,7 @@ public class PropertyServiceImpl implements PropertyService {
             throw new UserException("User Not Found");
         }
     }
+
 
     @Override
     public List<PropertyDto> findAll() {
@@ -121,7 +140,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public void addPhotos(Long propertyId, PropertyPhoto propertyPhoto) {
+    public void updatePhotos(Long propertyId, PropertyPhoto propertyPhoto) {
         Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not found " + propertyId));
         property.getPhotos().add(propertyPhoto);
         propertyRepository.save(property);
@@ -168,7 +187,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         return SearchResponse.builder()
                 .success(true)
-                .data(list.stream().map(property -> toDto(property)).collect(Collectors.toList()))
+                .data(list.stream().map(this::toDto).collect(Collectors.toList()))
                 .totalPages(page.getTotalPages())
                 .totalElements(page.getTotalElements())
                 .build();
@@ -189,6 +208,7 @@ public class PropertyServiceImpl implements PropertyService {
                 .filter(property -> property.getListingStatus() == ListingStatusEnum.CLOSED)
                 .map(PropertyMapper.MAPPER::mapToPropertyDto).collect(Collectors.toList());
     }
+
 
     private PropertyDto toDto(Property property) {
         PropertyDto propertyDto = new PropertyDto();

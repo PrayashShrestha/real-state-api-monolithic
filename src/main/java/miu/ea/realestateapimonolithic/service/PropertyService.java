@@ -5,12 +5,13 @@ import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.model.PropertyPhoto;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface PropertyService {
 
-    void save(PropertyDto propertyDto);
+    void save(PropertyDto propertyDto, MultipartFile [] multipartFiles);
 
     List<PropertyDto> findAll();
 
@@ -24,7 +25,7 @@ public interface PropertyService {
 
     PropertyDto findById(Long id);
 
-    void addPhotos(Long propertyId, PropertyPhoto propertyPhoto);
+    void updatePhotos(Long propertyId, PropertyPhoto propertyPhoto);
 
     void approveProperty(Long propertyId);
     void rejectProperty(Long propertyId);
@@ -34,4 +35,7 @@ public interface PropertyService {
     List<PropertyDto> findCurrentListing(Long userId);
 
     List<PropertyDto> findPastListing(Long userId);
+
+
+
 }
