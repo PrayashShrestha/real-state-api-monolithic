@@ -12,6 +12,7 @@ public interface UserService {
     void saveAdmin(AccountRegistrationRequest user);
 
     void save(User user);
+    User findUser(long id);
     List<UserResponseDto> findAllUsers();
     void updateUser(long id, UserUpdateDto user, MultipartFile profilePhoto);
 
