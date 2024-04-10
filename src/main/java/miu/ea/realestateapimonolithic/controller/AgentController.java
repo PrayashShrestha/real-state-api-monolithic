@@ -17,12 +17,6 @@ public class AgentController {
 
     private final AgentService agentService;
 
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<AgentReviewDto>> getAllAgentReview(@PathVariable Long id){
-        List<AgentReviewDto> agentReviews = agentService.getAllAgentReview(id);
-        return new ResponseEntity<>(agentReviews, HttpStatus.OK);
-    }
-
     @PostMapping("/{id}/add-languages")
     public ResponseEntity<String> addLanguages(@PathVariable Long id, @RequestParam List<String> languages){
         agentService.addLanguages(id, languages);

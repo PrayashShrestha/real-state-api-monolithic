@@ -35,12 +35,6 @@ public class BuyerController {
         return new ResponseEntity<>("Updated Successfully.", HttpStatus.OK);
     }
 
-    @PostMapping("/{agentId}/addReview")
-    public ResponseEntity<String> addAgentReview(@PathVariable Long agentId,
-                                                 @RequestBody AgentReviewDto agentReviewDto){
-        agentReviewService.saveAgentReview(agentReviewDto);
-        return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
-    }
     @PostMapping("/reviews")
     public ResponseEntity<String> addAgentReview(@RequestBody AgentReviewDto agentReviewDto) {
         agentReviewService.saveAgentReview(agentReviewDto);
