@@ -66,16 +66,17 @@ public class AgentServiceImpl implements AgentService {
 
 
     @Override
-    public void addLanguages(Long id, List<String> languages) {
-        Agent agent = agentRepository.findById(id).orElseThrow(()-> new NotFoundException("Agent not found."));
+    public void addLanguages(Long userId, List<String> languages) {
+        Agent agent = agentRepository.findById(userId).orElseThrow(()-> new NotFoundException("Agent not found."));
 
         List<Language> languagesList = languages.stream()
-                .map(language -> languageRepository.findByLanguage(language)
+                .map(language -> languageRepository.findByAgentIdAndLanguage(userId, language)
                         .orElseGet(() -> {
                             Language newLanguage = new Language();
                             newLanguage.setLanguage(language);
                             newLanguage.setAgent(agent);
-                            return languageRepository.save(newLanguage);
+                            return newLanguage;
+//                            return languageRepository.save(newLanguage);
                         }))
                 .collect(Collectors.toList());
 
@@ -84,15 +85,15 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public void addQualification(Long id, List<String> qualifications) {
-        Agent agent = agentRepository.findById(id).orElseThrow(()-> new NotFoundException("Agent not found."));
+    public void addQualification(Long userId, List<String> qualifications) {
+        Agent agent = agentRepository.findById(userId).orElseThrow(()-> new NotFoundException("Agent not found."));
         List<Qualification> quaificationList = qualifications.stream()
-                .map(qualification -> qualificationRepository.findByQualification(qualification)
+                .map(qualification -> qualificationRepository.findByAgentIdAndQualification(userId, qualification)
                         .orElseGet(() -> {
                             Qualification newQualification = new Qualification();
                             newQualification.setQualification(qualification);
                             newQualification.setAgent(agent);
-                            return qualificationRepository.save(newQualification);
+                            return newQualification;
                         }))
                 .collect(Collectors.toList());
 

@@ -15,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 public class Agent extends User {
     @JsonManagedReference(value = "agent-language")
-    @OneToMany(mappedBy = "agent")
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
     private List<Qualification> qualifications = new ArrayList<>();
 
     @JsonManagedReference(value = "agent-qualification")
-    @OneToMany(mappedBy = "agent")
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL)
     private List<Language> languages = new ArrayList<>();
 
     private Double averageRating;
