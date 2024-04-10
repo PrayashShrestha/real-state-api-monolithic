@@ -37,7 +37,6 @@ public class PropertyPhotoServiceImpl implements PropertyPhotoService {
     @Override
     public void savePropertyPhoto(MultipartFile multipartFile, Long propertyId) {
         try {
-            BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
             Map clodinaryResult = cloudinaryService.upload(multipartFile);
             PropertyPhoto photo = new PropertyPhoto();
             photo.setName((String) clodinaryResult.get("original_filename"));
@@ -50,7 +49,6 @@ public class PropertyPhotoServiceImpl implements PropertyPhotoService {
         } catch (IOException e) {
             throw new InvalidInputException("Image not valid");
         }
-
     }
 
     @Override
