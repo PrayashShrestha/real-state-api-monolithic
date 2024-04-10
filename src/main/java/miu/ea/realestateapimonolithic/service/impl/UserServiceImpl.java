@@ -85,6 +85,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveAdmin(AccountRegistrationRequest accountRegistrationRequest) {
+        // check duplicate email
+        Optional<User> optionalUser = userRepository.findByEmail(accountRegistrationRequest.getEmail());
+
+        if (optionalUser.isPresent()) {
+            throw new EmailAlreadyExistsException("Email Already Exists for User");
+        }
+
+        // validate role
+        if (accountRegistrationRequest.getUserRole() != RoleEnum.ADMIN) {
+            throw new InvalidInputException("Invalid user role.");
+        }
+
+        Role role = roleRepository.findByRole(accountRegistrationRequest.getUserRole());
+
+        // map dto to entity
+        User user = new User();
+        BeanUtils.copyProperties(accountRegistrationRequest, user);
+        user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
+        user.setRole(role);
+        user.setStatus(UserStatusEnum.ACTIVE);
+        userRepository.save(user);
+    }
+
+    @Override
     public User findUser(long id) {
         Optional<User> user = userRepository.findById(id);
 
@@ -112,11 +137,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(updatedUser);
         return updatedUser;
-    }
-
-    @Override
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
     }
 
     @Override

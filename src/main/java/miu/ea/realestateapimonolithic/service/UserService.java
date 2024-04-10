@@ -10,10 +10,10 @@ import java.util.List;
 public interface UserService {
 
     void saveUser(AccountRegistrationRequest user);
+    void saveAdmin(AccountRegistrationRequest user);
     User findUser(long id);
     List<User> findAllUsers();
     User updateUser(long id, User user);
-    void deleteUser(long id);
 
     void updatePassword(long id, String oldPassword, String newPassword);
     void activateUser(long id);

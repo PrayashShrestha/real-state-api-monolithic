@@ -4,6 +4,7 @@ public class Constant {
     public static final String API_URL_v1_PREFIX = "/api/v1";
 
     public static final String SIGNUP_URL = API_URL_v1_PREFIX + "/signup";
+    public static final String SIGNUP_ADMIN_URL = API_URL_v1_PREFIX + "/signup-admin";
     public static final String LOGIN_URL = API_URL_v1_PREFIX + "/login";
 
     public static final String USER_URL_PREFIX = API_URL_v1_PREFIX + "/users";
