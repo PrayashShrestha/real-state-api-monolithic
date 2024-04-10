@@ -13,12 +13,8 @@ public class SearchConditionDto {
     private Long id;
 
     private String nameOfSearch;
-
     private Double minPrice;
-
     private Double maxPrice;
-
     private ListingTypeEnum listingTypeEnum;
-
     private String location;
 }

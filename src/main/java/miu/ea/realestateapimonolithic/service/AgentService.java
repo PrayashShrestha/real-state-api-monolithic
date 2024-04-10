@@ -3,7 +3,6 @@ package miu.ea.realestateapimonolithic.service;
 import miu.ea.realestateapimonolithic.dto.AgentDto;
 import miu.ea.realestateapimonolithic.dto.AgentSearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
-import miu.ea.realestateapimonolithic.model.Agent;
 import org.springframework.data.domain.Pageable;
 
 public interface AgentService {

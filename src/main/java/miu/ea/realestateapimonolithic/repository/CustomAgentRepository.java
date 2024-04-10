@@ -1,20 +1,15 @@
 package miu.ea.realestateapimonolithic.repository;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
 import miu.ea.realestateapimonolithic.dto.AgentSearchRequest;
 import miu.ea.realestateapimonolithic.model.Agent;
-import miu.ea.realestateapimonolithic.model.AgentReview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

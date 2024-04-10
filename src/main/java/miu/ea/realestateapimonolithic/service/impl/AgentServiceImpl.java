@@ -9,7 +9,6 @@ import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.mapper.AgentMapper;
 import miu.ea.realestateapimonolithic.mapper.AgentReviewMapper;
 import miu.ea.realestateapimonolithic.model.Agent;
-import miu.ea.realestateapimonolithic.model.Property;
 import miu.ea.realestateapimonolithic.repository.AgentRepository;
 import miu.ea.realestateapimonolithic.repository.CustomAgentRepository;
 import miu.ea.realestateapimonolithic.service.AgentService;

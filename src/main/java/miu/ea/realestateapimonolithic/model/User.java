@@ -1,6 +1,5 @@
 package miu.ea.realestateapimonolithic.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.UserStatusEnum;
