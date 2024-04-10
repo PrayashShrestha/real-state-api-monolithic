@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(Constant.AGENT_URL_PREFIX)
 @RequiredArgsConstructor
