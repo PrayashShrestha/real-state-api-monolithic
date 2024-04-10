@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.mapToUser(accountRegistrationRequest);
         user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRole(role);
+        user.setCreateDate(LocalDateTime.now());
         user.setStatus(UserStatusEnum.ACTIVE);
 
         if (accountRegistrationRequest.getUserRole() == RoleEnum.BUYER) {
@@ -86,7 +87,6 @@ public class UserServiceImpl implements UserService {
             BeanUtils.copyProperties(user, agent);
             agent.setLanguages(List.of());
             agent.setQualifications(List.of());
-//            agent.setReviews(List.of());
             agentRepository.save(agent);
         } else if (role.getRole() == RoleEnum.SELLER) {
             userRepository.save(user);
@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(accountRegistrationRequest, user);
         user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRole(role);
+        user.setCreateDate(LocalDateTime.now());
         user.setStatus(UserStatusEnum.ACTIVE);
         userRepository.save(user);
     }

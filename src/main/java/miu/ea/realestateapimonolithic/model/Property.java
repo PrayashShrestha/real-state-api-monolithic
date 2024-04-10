@@ -10,6 +10,7 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -41,6 +42,9 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     private ListingStatusEnum listingStatus;
+
+    private LocalDateTime listingDate;
+    private LocalDateTime expiredDate;
 
 //    @JsonBackReference(value = "user-property")
     @Fetch(FetchMode.JOIN)
