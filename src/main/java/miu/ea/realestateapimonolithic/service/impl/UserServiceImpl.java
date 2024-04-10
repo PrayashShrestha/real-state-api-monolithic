@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(long id, User user) {
+    public void updateUser(long id, User user) {
         Optional<User> retrievedUser = userRepository.findById(id);
         if(retrievedUser.isEmpty()){
             throw new NotFoundException("User not Found.");
@@ -147,7 +147,6 @@ public class UserServiceImpl implements UserService {
         updatedUser.setLocation(user.getLocation());
 
         userRepository.save(updatedUser);
-        return updatedUser;
     }
 
     @Override

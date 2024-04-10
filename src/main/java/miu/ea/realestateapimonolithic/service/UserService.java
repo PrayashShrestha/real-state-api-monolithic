@@ -15,7 +15,7 @@ public interface UserService {
     void saveAdmin(AccountRegistrationRequest user);
     User findUser(long id);
     List<UserResponseDto> findAllUsers();
-    User updateUser(long id, User user);
+    void updateUser(long id, User user);
 
     void updatePassword(long id, String oldPassword, String newPassword);
     void activateUser(long id);

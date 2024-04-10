@@ -27,19 +27,15 @@ public class UserController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public User findUser(@PathVariable long id) {
-        return userService.findUser(id);
-    }
-
     @GetMapping
     public List<UserResponseDto> findAllUser(){
         return userService.findAllUsers();
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable long id, @RequestBody User user){
-        return userService.updateUser(id, user);
+    public ResponseEntity<String> updateUser(@PathVariable long id, @RequestBody User user){
+        userService.updateUser(id, user);
+        return new ResponseEntity<>("User profile updated successfully.", HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update-password")
@@ -59,12 +55,12 @@ public class UserController {
         return new ResponseEntity<>(agentReviews,HttpStatus.OK);
     }
 
-
     @GetMapping("/{userId}/deactivate")
     public ApiResponse<?> deactivateUser(@PathVariable Long userId) {
         userService.deactivateUser(userId);
         return ApiResponse.builder()
                 .success(true)
+                .message("User was deactivated.")
                 .build();
     }
 
