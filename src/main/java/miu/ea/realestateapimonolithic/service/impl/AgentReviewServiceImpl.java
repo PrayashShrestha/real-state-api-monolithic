@@ -1,6 +1,7 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import miu.ea.realestateapimonolithic.common.AgentReviewStatusEnum;
 import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.UserException;
@@ -38,6 +39,7 @@ public class AgentReviewServiceImpl implements AgentReviewService {
         agentReview.setRating(agentReviewDto.getRating());
         agentReview.setAgent(agent);
         agentReview.setReviewer(reviewer);
+        agentReview.setStatus(AgentReviewStatusEnum.ACTIVE);
         agentReviewRepository.save(agentReview);
 
         // update averageRating for Agent
