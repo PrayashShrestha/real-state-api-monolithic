@@ -10,7 +10,6 @@ import miu.ea.realestateapimonolithic.dto.AccountRegistrationRequest;
 import miu.ea.realestateapimonolithic.dto.ApiResponse;
 import miu.ea.realestateapimonolithic.dto.LoginRequest;
 import miu.ea.realestateapimonolithic.dto.TokenResponse;
-import miu.ea.realestateapimonolithic.dto.UserDto;
 import miu.ea.realestateapimonolithic.exception.EmailAlreadyExistsException;
 import miu.ea.realestateapimonolithic.exception.MismatchException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
@@ -25,8 +24,10 @@ import miu.ea.realestateapimonolithic.service.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -156,6 +157,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existingUser);
     }
 
+    @Transactional
     public ApiResponse<?> login(LoginRequest req) {
         Optional<User> optionalUser = userRepository.findByEmail(req.getEmail());
         if (!optionalUser.isPresent()) {
@@ -165,18 +167,90 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
         User user = optionalUser.get();
+        if (user.getStatus() == UserStatusEnum.DEACTIVE) {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Your account has been deactivated.")
+                    .build();
+        }
+        if (user.getStatus() == UserStatusEnum.REJECTED) {
+            return ApiResponse.builder()
+                    .success(false)
+                    .message("Your account has been rejected.")
+                    .build();
+        }
+        // login successfully
         if (securityConfig.passwordEncoder().matches(req.getPassword(), user.getPassword())) {
+            if (user.getFailedAttempt() > 0) {
+                resetFailedAttempt(user);
+            }
             TokenResponse tokenResponse = createTokenResponse();
             return ApiResponse.builder()
                     .success(true)
                     .data(tokenResponse)
                     .build();
         } else {
-            return ApiResponse.builder()
-                    .success(false)
-                    .message("Incorrect email or password.")
-                    .build();
+            if (user.getStatus() == UserStatusEnum.LOCKED) {
+                if (unlock(user)) {
+                    return ApiResponse.builder()
+                            .success(true)
+                            .message("Your account has been unlocked. Please try to login again.")
+                            .build();
+                } else {
+                    return ApiResponse.builder()
+                            .success(false)
+                            .message("Your account has been locked due to "
+                                    + Constant.MAX_LOGIN_FAILED_ATTEMPTS
+                                    + " failed attempts. Please try again.")
+                            .build();
+                }
+            } else {
+                if (user.getFailedAttempt() < Constant.MAX_LOGIN_FAILED_ATTEMPTS) {
+                    increaseFailedAttempt(user);
+                    return ApiResponse.builder()
+                            .success(false)
+                            .message("Incorrect email or password.")
+                            .build();
+                } else {
+                    lock(user);
+                    return ApiResponse.builder()
+                            .success(false)
+                            .message("Your account has been locked due to "
+                                    + Constant.MAX_LOGIN_FAILED_ATTEMPTS
+                                    + " failed attempts. Please try again.")
+                            .build();
+                }
+            }
         }
+    }
+
+    private void increaseFailedAttempt(User user) {
+        int newFailAttempt = user.getFailedAttempt() + 1;
+        userRepository.updateFailedAttempt(newFailAttempt, user.getEmail());
+    }
+
+    private void lock(User user) {
+        user.setStatus(UserStatusEnum.LOCKED);
+        user.setLockTime(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    private boolean unlock(User user) {
+        long lockTime = user.getLockTime().toInstant(ZoneOffset.UTC).toEpochMilli();
+        long currentTime = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        if (lockTime + Constant.LOCK_TIME_DURATION < currentTime) {
+            user.setStatus(UserStatusEnum.ACTIVE);
+            user.setLockTime(null);
+            user.setFailedAttempt(0);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    public void resetFailedAttempt(User user) {
+        userRepository.updateFailedAttempt(0, user.getEmail());
     }
 
     private TokenResponse createTokenResponse() {
