@@ -7,7 +7,6 @@ import miu.ea.realestateapimonolithic.model.User;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.UserService;
-import miu.ea.realestateapimonolithic.service.impl.PropertyPhotoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,6 @@ public class UserController {
     private final UserService userService;
     private final PropertyService propertyService;
     private final AgentReviewService agentReviewService;
-
-    // move to AuthController
-//    @PostMapping
-//    public void saveUser(@RequestBody AccountRegistrationRequest user) {
-//         userService.saveUser(user);
-//    }
 
     @GetMapping("/{userId}/property")
     public ResponseEntity<List<PropertyDto>> getPropertyByUser(@PathVariable long userId){
@@ -47,11 +40,6 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable long id, @RequestBody User user){
         return userService.updateUser(id, user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable long id){
-        userService.deleteUser(id);
     }
 
     @PutMapping("/{id}/update-password")
