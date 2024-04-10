@@ -6,11 +6,11 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,9 +32,7 @@ public class Property {
     private Integer numOfBedrooms;
     private Integer numOfBathrooms;
 
-    @OneToMany
-    @Cascade(value = CascadeType.ALL)
-    @JoinColumn(name = "property_id")
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private List<PropertyPhoto> photos;
 
     @Enumerated(EnumType.STRING)
@@ -50,4 +48,8 @@ public class Property {
     @Fetch(FetchMode.JOIN)
     @ManyToOne
     private User user;
+    public void addPropertyPhoto(PropertyPhoto propertyPhoto){
+        photos = new ArrayList<>();
+        this.photos.add(propertyPhoto);
+    }
 }

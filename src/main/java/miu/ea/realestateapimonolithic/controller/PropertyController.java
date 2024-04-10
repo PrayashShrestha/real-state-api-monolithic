@@ -21,8 +21,8 @@ public class PropertyController {
     private final PropertyPhotoService propertyPhotoService;
 
     @PostMapping
-    public ResponseEntity<String> saveProperty(@RequestBody PropertyDto propertyDto){
-        propertyService.save(propertyDto);
+    public ResponseEntity<String> saveProperty(@RequestPart PropertyDto propertyDto, @RequestPart(name = "photo") MultipartFile[] photos){
+        propertyService.save(propertyDto, photos);
         return new ResponseEntity<>("Property was created successfully", HttpStatus.OK);
     }
 
@@ -56,16 +56,22 @@ public class PropertyController {
         return new ResponseEntity<>("Property Deleted Successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/{propertyId}/upload")
-    public ResponseEntity<String> upload(@RequestParam(name = "file") MultipartFile multipartFile, @PathVariable Long propertyId) {
-        propertyPhotoService.savePropertyPhoto(multipartFile, propertyId);
+    @PostMapping("/{propertyId}/photos")
+    public ResponseEntity<String> upload(@RequestParam(name = "photo") MultipartFile[] multipartFile, @PathVariable Long propertyId) {
+        propertyPhotoService.updatePropertyPhoto(propertyId, multipartFile);
         return new ResponseEntity<>("Image uploaded successfully!", HttpStatus.OK);
     }
 
-    @GetMapping("/{propertyId}/upload")
+    @GetMapping("/{propertyId}/photos")
     public ResponseEntity<List<PropertyPhotoDto>> getPropertyPhotosByProperty(@PathVariable Long propertyId){
         List<PropertyPhotoDto> photos =  propertyPhotoService.findPropertyPhotoByProperty(propertyId);
         return new ResponseEntity<>(photos,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/photos/{propertyPhototoId}")
+    public ResponseEntity<String> deletePropertyPhoto(@PathVariable Long propertyPhototoId){
+        propertyPhotoService.deletePropertyPhoto(propertyPhototoId);
+        return new ResponseEntity<>("Photo successfully deleted", HttpStatus.OK);
     }
 
 }
