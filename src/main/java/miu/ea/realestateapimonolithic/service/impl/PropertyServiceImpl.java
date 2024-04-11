@@ -90,7 +90,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<PropertyDto> findAllByUserAndListingStatus(Long userId) throws UserException {
+    public SearchResponse findAllByUserAndListingStatus(Long userId) throws UserException {
         RoleEnum role;
         if(userRepository.findById(userId).isPresent()){
             User user = userRepository.findById(userId).get();
@@ -98,16 +98,18 @@ public class PropertyServiceImpl implements PropertyService {
             List<Property> properties = propertyRepository.findAllByUser(userId);
             if (role == RoleEnum.ADMIN){
                 List<Property> propertiesInReview =  propertyRepository.findAllByListingStatus(ListingStatusEnum.IN_REVIEW);
-                return propertiesInReview.stream().map(PropertyMapper.MAPPER::mapToPropertyDto)
+                List<PropertyDto> propertyDtosInreview= propertiesInReview.stream().map(PropertyMapper.MAPPER::mapToPropertyDto)
                         .collect(Collectors.toList());
+                return UtilityClass.toSearchResponse(propertyDtosInreview);
 
             } else if (role == RoleEnum.BUYER) {
-                return this.findAllByListingStatus();
+                return this.getPropertyByUserPreference(userId);
             }else{
-                return properties.stream()
+                List<PropertyDto> guestUserProperties= properties.stream()
                         .filter(property -> property.getListingStatus() != ListingStatusEnum.DELETE)
                         .map(PropertyMapper.MAPPER::mapToPropertyDto)
                         .collect(Collectors.toList());
+                return UtilityClass.toSearchResponse(guestUserProperties);
             }
 
         }
@@ -152,16 +154,15 @@ public class PropertyServiceImpl implements PropertyService {
     public SearchResponse getPropertyByUserPreference(Long userId) {
         Buyer buyer = buyerRepository.findById(userId).orElseThrow(() -> new UserException("Buyer Not Found. Id" + userId));
         BuyerPreference preferences = buyer.getPreference();
-        if(preferences!=null){
+        if(preferences!=null) {
             PropertySearchRequest propertySearchRequest = new PropertySearchRequest();
             BeanUtils.copyProperties(preferences, propertySearchRequest);
             propertySearchRequest.setPageSize(10);
             propertySearchRequest.setPageNumber(1);
-            PageRequest pageRequest = PageRequest.of(propertySearchRequest.getPageNumber()-1, propertySearchRequest.getPageSize());
-            return this.search(propertySearchRequest,pageRequest);
+            PageRequest pageRequest = PageRequest.of(propertySearchRequest.getPageNumber() - 1, propertySearchRequest.getPageSize());
+            return this.search(propertySearchRequest, pageRequest);
         }else {
-            List<PropertyDto> list = this.findAllByUserAndListingStatus(userId);
-            return UtilityClass.toSearchResponse(list);
+            return UtilityClass.toSearchResponse(this.findAllByListingStatus());
         }
     }
 

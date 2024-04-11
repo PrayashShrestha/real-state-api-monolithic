@@ -24,9 +24,8 @@ public class UserController {
     private final AgentReviewService agentReviewService;
 
     @GetMapping("/{userId}/property")
-    public ResponseEntity<List<PropertyDto>> getPropertyByUser(@PathVariable long userId){
-        List<PropertyDto> properties = propertyService.findAllByUserAndListingStatus(userId);
-        return new ResponseEntity<>(properties, HttpStatus.OK);
+    public SearchResponse getPropertyByUser(@PathVariable long userId){
+        return propertyService.findAllByUserAndListingStatus(userId);
     }
 
     @GetMapping

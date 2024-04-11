@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
 import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertyPhotoDto;
+import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.service.PropertyPhotoService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
+import miu.ea.realestateapimonolithic.utility.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +29,9 @@ public class PropertyController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PropertyDto>> getAllForGuest(){
+    public SearchResponse getAllForGuest(){
         List<PropertyDto> properties = propertyService.findAllByListingStatus();
-        return new ResponseEntity<>(properties, HttpStatus.OK);
+        return UtilityClass.toSearchResponse(properties);
     }
 
     @GetMapping("/{id}")
@@ -44,11 +46,10 @@ public class PropertyController {
         return new ResponseEntity<>(propertyDto, HttpStatus.OK);
     }
 
-    //for admin
+    //for admin and buyer preference
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PropertyDto>> getPropertiesBasedOnUser(@PathVariable Long userId){
-        List<PropertyDto> propertyDtos = propertyService.findAllByUserAndListingStatus(userId);
-        return new ResponseEntity<>(propertyDtos, HttpStatus.OK);
+    public SearchResponse getPropertiesBasedOnUser(@PathVariable Long userId){
+        return propertyService.findAllByUserAndListingStatus(userId);
     }
 
     @GetMapping("/user/{userId}/pastListings")

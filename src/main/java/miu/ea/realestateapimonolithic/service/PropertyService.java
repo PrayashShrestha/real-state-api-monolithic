@@ -16,7 +16,7 @@ public interface PropertyService {
 
     List<PropertyDto> findAll();
 
-    List<PropertyDto> findAllByUserAndListingStatus(Long userId);
+    SearchResponse findAllByUserAndListingStatus(Long userId);
 
     void deleteById(Long id);
 
