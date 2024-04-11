@@ -3,6 +3,7 @@ package miu.ea.realestateapimonolithic.repository;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
+import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.model.Property;
@@ -20,6 +21,7 @@ public class CustomPropertyRepository {
         Specification<Property> specs = Specification
                 .where(withStatus(ListingStatusEnum.APPROVED))
                 .and(propertyTypeEqual(searchRequest.getPropertyType()))
+                .and(listingStatusEqual(searchRequest.getListingType()))
                 .and(numOfBedroomsEqual(searchRequest.getNumOfBedrooms()))
                 .and(numOfBathroomsEqual(searchRequest.getNumOfBathrooms()))
                 .and(priceGreaterThanEqual(searchRequest.getMinPrice()))
@@ -35,6 +37,11 @@ public class CustomPropertyRepository {
     static Specification<Property> propertyTypeEqual(@Nullable PropertyTypeEnum propertyType) {
         return (root, query, criteriaBuilder)-> propertyType == null ? null :
                 criteriaBuilder.equal(root.get("propertyType"), propertyType);
+    }
+
+    static Specification<Property> listingStatusEqual(@Nullable ListingTypeEnum listingType){
+        return ((root, query, criteriaBuilder) -> listingType == null ? null :
+                criteriaBuilder.equal(root.get("listingType"), listingType));
     }
 
     static Specification<Property> numOfBedroomsEqual(@Nullable Integer numOfBedrooms) {
@@ -61,4 +68,5 @@ public class CustomPropertyRepository {
         return (root, query, criteriaBuilder)-> location == null ? null :
                 criteriaBuilder.like(root.get("location"), "%" + location + "%");
     }
+
 }

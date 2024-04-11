@@ -5,6 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
+import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
 @Embeddable
@@ -13,6 +14,8 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 public class BuyerPreference {
     @Enumerated(EnumType.STRING)
     private PropertyTypeEnum propertyType;
+    @Enumerated(EnumType.STRING)
+    private ListingTypeEnum listingType;
     private Integer numOfBedrooms;
     private Integer numOfBathrooms;
     private Double minPrice;

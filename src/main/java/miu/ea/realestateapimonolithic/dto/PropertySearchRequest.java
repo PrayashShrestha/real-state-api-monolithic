@@ -1,5 +1,6 @@
 package miu.ea.realestateapimonolithic.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
@@ -7,6 +8,7 @@ import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
 @Getter
 @Setter
+@Data
 public class PropertySearchRequest {
     private PropertyTypeEnum propertyType;
     private Integer numOfBedrooms;

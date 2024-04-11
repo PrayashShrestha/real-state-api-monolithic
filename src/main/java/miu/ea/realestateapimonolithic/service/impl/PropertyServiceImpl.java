@@ -12,18 +12,16 @@ import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.exception.PropertyException;
 import miu.ea.realestateapimonolithic.exception.UserException;
 import miu.ea.realestateapimonolithic.mapper.PropertyMapper;
-import miu.ea.realestateapimonolithic.model.Property;
-import miu.ea.realestateapimonolithic.model.PropertyPhoto;
-import miu.ea.realestateapimonolithic.model.User;
-import miu.ea.realestateapimonolithic.repository.CustomPropertyRepository;
-import miu.ea.realestateapimonolithic.repository.PropertyPhotoRepository;
-import miu.ea.realestateapimonolithic.repository.PropertyRepository;
-import miu.ea.realestateapimonolithic.repository.UserRepository;
+import miu.ea.realestateapimonolithic.model.*;
+import miu.ea.realestateapimonolithic.repository.*;
+import miu.ea.realestateapimonolithic.service.BuyerService;
 import miu.ea.realestateapimonolithic.service.PropertyPhotoService;
 import miu.ea.realestateapimonolithic.service.PropertyService;
+import miu.ea.realestateapimonolithic.utility.UtilityClass;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +40,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final UserRepository userRepository;
     private final CustomPropertyRepository customPropertyRepository;
     private final CloudinaryServiceImpl cloudinaryService;
+    private final BuyerRepository buyerRepository;
 
     @Override
     public void save(PropertyDto propertyDto, MultipartFile [] multipartFiles) {
@@ -123,14 +122,6 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public void delete(PropertyDto propertyDto) {
-        Long propertyId = propertyDto.getId();
-        Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property Not Found. Id:" + propertyId));
-        property.setListingStatus(ListingStatusEnum.DELETE);
-        propertyRepository.save(property);
-    }
-
-    @Override
     public List<PropertyDto> findAllByListingStatus() {
         return propertyRepository.findAllByListingStatus(ListingStatusEnum.APPROVED)
                 .stream()
@@ -151,6 +142,23 @@ public class PropertyServiceImpl implements PropertyService {
         } else {
                 throw new PropertyException("Property Doesn't Exist");
 
+        }
+    }
+
+    @Override
+    public SearchResponse getPropertyByUserPreference(Long userId) {
+        Buyer buyer = buyerRepository.findById(userId).orElseThrow(() -> new UserException("Buyer Not Found. Id" + userId));
+        BuyerPreference preferences = buyer.getPreference();
+        if(preferences!=null){
+            PropertySearchRequest propertySearchRequest = new PropertySearchRequest();
+            BeanUtils.copyProperties(preferences, propertySearchRequest);
+            propertySearchRequest.setPageSize(10);
+            propertySearchRequest.setPageNumber(1);
+            PageRequest pageRequest = PageRequest.of(propertySearchRequest.getPageNumber()-1, propertySearchRequest.getPageSize());
+            return this.search(propertySearchRequest,pageRequest);
+        }else {
+            List<PropertyDto> list = this.findAllByUserAndListingStatus(userId);
+            return UtilityClass.toSearchResponse(list);
         }
     }
 
@@ -203,6 +211,7 @@ public class PropertyServiceImpl implements PropertyService {
     public SearchResponse search(PropertySearchRequest searchRequest, Pageable pageable) {
         Page<Property> page = customPropertyRepository.searchProperty(searchRequest, pageable);
         List<Property> list = page.getContent();
+        System.out.println("page content"+ list);
 
         return SearchResponse.builder()
                 .success(true)
@@ -239,4 +248,6 @@ public class PropertyServiceImpl implements PropertyService {
 
         return propertyDto;
     }
+
+
 }
