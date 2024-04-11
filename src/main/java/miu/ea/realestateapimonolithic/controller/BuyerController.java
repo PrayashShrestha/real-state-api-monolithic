@@ -2,14 +2,14 @@ package miu.ea.realestateapimonolithic.controller;
 
 import lombok.RequiredArgsConstructor;
 import miu.ea.realestateapimonolithic.common.Constant;
-import miu.ea.realestateapimonolithic.dto.AgentReviewDto;
-import miu.ea.realestateapimonolithic.dto.PropertyDto;
-import miu.ea.realestateapimonolithic.dto.SearchConditionDto;
+import miu.ea.realestateapimonolithic.dto.*;
 import miu.ea.realestateapimonolithic.model.Buyer;
 import miu.ea.realestateapimonolithic.model.BuyerPreference;
 import miu.ea.realestateapimonolithic.service.AgentReviewService;
 import miu.ea.realestateapimonolithic.service.BuyerService;
+import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.SearchConditionService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,6 +69,12 @@ public class BuyerController {
     public ResponseEntity<List<SearchConditionDto>> viewSavedSearchConditions(@PathVariable Long buyerId){
         List<SearchConditionDto> searchConditions = searchConditionService.getAllSearchCondition(buyerId);
         return new ResponseEntity<>(searchConditions, HttpStatus.OK);
+    }
+
+    //searching using the saved search conditions
+    @PostMapping("{buyerId}/conditions/{searchConditionId}/search")
+    public SearchResponse searchProperty(@PathVariable Long buyerId, @PathVariable Long searchConditionId){
+        return searchConditionService.searchBasedOnCondition(searchConditionId);
     }
 
     @PutMapping("{buyerId}/conditions/{searchConditionId}")

@@ -4,6 +4,7 @@ import miu.ea.realestateapimonolithic.dto.PropertyDto;
 import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.model.PropertyPhoto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,13 +20,13 @@ public interface PropertyService {
 
     void deleteById(Long id);
 
-    void delete(PropertyDto property);
-
     List<PropertyDto> findAllByListingStatus();
 
     PropertyDto findById(Long id);
 
     void updatePhotos(Long propertyId, PropertyPhoto propertyPhoto);
+
+    SearchResponse getPropertyByUserPreference(Long userId);
 
     void approveProperty(Long propertyId);
     void rejectProperty(Long propertyId);

@@ -1,16 +1,21 @@
 package miu.ea.realestateapimonolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import miu.ea.realestateapimonolithic.dto.PropertySearchRequest;
 import miu.ea.realestateapimonolithic.dto.SearchConditionDto;
+import miu.ea.realestateapimonolithic.dto.SearchResponse;
 import miu.ea.realestateapimonolithic.exception.NotAuthorizedException;
 import miu.ea.realestateapimonolithic.exception.NotFoundException;
 import miu.ea.realestateapimonolithic.mapper.SearchConditionMapper;
 import miu.ea.realestateapimonolithic.model.Buyer;
 import miu.ea.realestateapimonolithic.model.SearchCondition;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
+import miu.ea.realestateapimonolithic.repository.CustomPropertyRepository;
 import miu.ea.realestateapimonolithic.repository.SearchConditionRepository;
+import miu.ea.realestateapimonolithic.service.PropertyService;
 import miu.ea.realestateapimonolithic.service.SearchConditionService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +26,11 @@ import java.util.stream.Collectors;
 public class SearchConditionServiceImpl implements SearchConditionService {
     private final SearchConditionRepository searchConditionRepository;
     private final BuyerRepository buyerRepository;
+    private final PropertyService propertyService;
 
     @Override
     public void saveSearchCondition(Long buyerId, SearchConditionDto searchConditionDto) {
         Buyer buyer = buyerRepository.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
-//        SearchCondition searchCondition = SearchConditionMapper.MAPPER.mapToSearchCondition(searchConditionDto);
         SearchCondition searchCondition = new SearchCondition();
         BeanUtils.copyProperties(searchConditionDto, searchCondition);
         searchCondition.setBuyer(buyer);
@@ -66,5 +71,24 @@ public class SearchConditionServiceImpl implements SearchConditionService {
         }else {
             throw new NotAuthorizedException("Not Authorized to delete this condition " + buyerId);
         }
+    }
+
+    @Override
+    public SearchResponse searchBasedOnCondition(Long searchConditionId) {
+        SearchCondition searchCondition = searchConditionRepository.findById(searchConditionId).orElseThrow(() -> new NotFoundException("Search Condition Not Found. Id:" + searchConditionId));
+        PropertySearchRequest propertySearchRequest = new PropertySearchRequest();
+        BeanUtils.copyProperties(searchCondition, propertySearchRequest);
+//        propertySearchRequest.setPropertyType(searchCondition.getPropertyType());
+//        propertySearchRequest.setMaxPrice(searchCondition.getMaxPrice());
+//        propertySearchRequest.setLocation(searchCondition.getLocation());
+//        propertySearchRequest.setListingType(searchCondition.getListingType());
+//        propertySearchRequest.setMinPrice(searchCondition.getMinPrice());
+//        propertySearchRequest.setNumOfBathrooms(searchCondition.getNumOfBathrooms());
+//        propertySearchRequest.setNumOfBedrooms(searchCondition.getNumOfBedrooms());
+        propertySearchRequest.setPageSize(5);
+        propertySearchRequest.setPageNumber(1);
+//        System.out.println(propertySearchRequest.toString());
+        PageRequest pageRequest = PageRequest.of(propertySearchRequest.getPageNumber()-1, propertySearchRequest.getPageSize());
+        return propertyService.search(propertySearchRequest, pageRequest);
     }
 }
