@@ -52,5 +52,15 @@ public class AdminController {
                 .message("User profile has been approved.")
                 .build();
     }
+
+    @GetMapping("/user/{userId}/reset-password")
+    public ApiResponse<?> resetUserPassword(@PathVariable Long userId) {
+        String newPassword = userService.resetUserPassword(userId);
+        String response = String.format("Password has been updated to %s", newPassword);
+        return ApiResponse.builder()
+                .success(true)
+                .message(response)
+                .build();
+    }
 }
 

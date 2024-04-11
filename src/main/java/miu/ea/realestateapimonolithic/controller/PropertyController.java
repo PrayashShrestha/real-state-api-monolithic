@@ -32,9 +32,9 @@ public class PropertyController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<PropertyDto> getAllPropertyByUser(@PathVariable Long userId) {
-        PropertyDto property = propertyService.findById(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<PropertyDto> getPropertyById(@PathVariable Long id) {
+        PropertyDto property = propertyService.findById(id);
         return new ResponseEntity<>(property, HttpStatus.OK);
     }
 

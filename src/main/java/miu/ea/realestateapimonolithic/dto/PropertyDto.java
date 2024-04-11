@@ -5,6 +5,7 @@ import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -25,4 +26,5 @@ public class PropertyDto {
     private ListingStatusEnum listingStatus;
     private UserDto user;
     private List<PropertyPhotoDto> photos;
+    private LocalDateTime expiredDate;
 }

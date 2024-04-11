@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,9 @@ public class PropertyServiceImpl implements PropertyService {
         if(user.isPresent()){
             RoleEnum role = user.get().getRole().getRole();
             if(role == RoleEnum.AGENT || role == RoleEnum.SELLER){
-                Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
+//                Property property = PropertyMapper.MAPPER.mapToProperty(propertyDto);
+                Property property = new Property();
+                BeanUtils.copyProperties(propertyDto, property);
                 property.setUser(user.get());
                 for(MultipartFile photo: multipartFiles){
                     try {
@@ -60,12 +63,14 @@ public class PropertyServiceImpl implements PropertyService {
                         propertyPhoto.setImageId((String) clodinaryResult.get("public_id"));
                         propertyPhoto.setProperty(property);
                         property.addPropertyPhoto(propertyPhoto);
-                        property.setListingStatus(ListingStatusEnum.IN_REVIEW);
-                        propertyRepository.save(property);
+
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
+                property.setListingStatus(ListingStatusEnum.IN_REVIEW);
+                property.setListingDate(LocalDateTime.now());
+                propertyRepository.save(property);
             }else {
                 throw new NotAuthorizedException("Not Authorized");
             }

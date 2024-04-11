@@ -66,16 +66,5 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{userId}/reset-password")
-    public ApiResponse<?> resetUserPassword(@PathVariable Long userId) {
-        String newPassword = userService.resetUserPassword(userId);
-        String response = String.format("Password has been updated to %s",newPassword);
-        return ApiResponse.builder()
-                .success(true)
-                .message(response)
-                .build();
-    }
-
-
 }
 

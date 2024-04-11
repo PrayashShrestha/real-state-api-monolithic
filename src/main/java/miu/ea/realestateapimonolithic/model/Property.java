@@ -1,5 +1,6 @@
 package miu.ea.realestateapimonolithic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingStatusEnum;
@@ -42,6 +43,7 @@ public class Property {
     private ListingStatusEnum listingStatus;
 
     private LocalDateTime listingDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime expiredDate;
 
     @Fetch(FetchMode.JOIN)
