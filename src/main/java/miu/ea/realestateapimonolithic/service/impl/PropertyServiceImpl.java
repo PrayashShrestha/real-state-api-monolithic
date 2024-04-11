@@ -97,7 +97,10 @@ public class PropertyServiceImpl implements PropertyService {
             role = user.getRole().getRole();
             List<Property> properties = propertyRepository.findAllByUser(userId);
             if (role == RoleEnum.ADMIN){
-                return this.findAll();
+                List<Property> propertiesInReview =  propertyRepository.findAllByListingStatus(ListingStatusEnum.IN_REVIEW);
+                return propertiesInReview.stream().map(PropertyMapper.MAPPER::mapToPropertyDto)
+                        .collect(Collectors.toList());
+
             } else if (role == RoleEnum.BUYER) {
                 return this.findAllByListingStatus();
             }else{

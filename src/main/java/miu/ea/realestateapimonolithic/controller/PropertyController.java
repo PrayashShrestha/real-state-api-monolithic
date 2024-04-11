@@ -44,6 +44,13 @@ public class PropertyController {
         return new ResponseEntity<>(propertyDto, HttpStatus.OK);
     }
 
+    //for admin
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PropertyDto>> getPropertiesBasedOnUser(@PathVariable Long userId){
+        List<PropertyDto> propertyDtos = propertyService.findAllByUserAndListingStatus(userId);
+        return new ResponseEntity<>(propertyDtos, HttpStatus.OK);
+    }
+
     @GetMapping("/user/{userId}/pastListings")
     public ResponseEntity<List<PropertyDto>> getPastListings(@PathVariable Long userId){
         List<PropertyDto> propertyDto = propertyService.findPastListing(userId);
