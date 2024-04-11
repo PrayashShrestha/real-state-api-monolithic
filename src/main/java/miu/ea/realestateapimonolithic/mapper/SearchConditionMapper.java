@@ -2,13 +2,19 @@ package miu.ea.realestateapimonolithic.mapper;
 
 import miu.ea.realestateapimonolithic.dto.SearchConditionDto;
 import miu.ea.realestateapimonolithic.model.SearchCondition;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.BeanUtils;
 
-@Mapper
-public interface SearchConditionMapper {
-    SearchConditionMapper MAPPER = Mappers.getMapper(SearchConditionMapper.class);
+public class SearchConditionMapper {
 
-    SearchConditionDto mapToSearchConditionDto(SearchCondition SearchCondition);
-    SearchCondition mapToSearchCondition(SearchConditionDto SearchConditionDto);
+    public static SearchCondition toEntity(SearchConditionDto searchConditionDto){
+        SearchCondition searchCondition = new SearchCondition();
+        BeanUtils.copyProperties(searchConditionDto, searchCondition);
+        return searchCondition;
+    }
+
+    public static SearchConditionDto toDto(SearchCondition searchCondition){
+        SearchConditionDto searchConditionDto = new SearchConditionDto();
+        BeanUtils.copyProperties(searchCondition, searchConditionDto);
+        return searchConditionDto;
+    }
 }

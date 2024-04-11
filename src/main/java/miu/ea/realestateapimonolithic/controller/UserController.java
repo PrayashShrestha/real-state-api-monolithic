@@ -51,7 +51,7 @@ public class UserController {
         return new ResponseEntity<>(agentReviews, HttpStatus.OK);
     }
 
-    @GetMapping("/reviews/{agentId}")
+    @GetMapping("/reviews/agent/{agentId}")
     public ResponseEntity<List<AgentReviewDto>> getAgentReviewById(@PathVariable Long agentId){
         List<AgentReviewDto> agentReviews = agentReviewService.getAgentReviewsByAgentId(agentId);
         return new ResponseEntity<>(agentReviews,HttpStatus.OK);

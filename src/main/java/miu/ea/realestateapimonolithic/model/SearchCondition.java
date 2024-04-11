@@ -3,6 +3,7 @@ package miu.ea.realestateapimonolithic.model;
 import jakarta.persistence.*;
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
+import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,11 +17,13 @@ public class SearchCondition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Enumerated(EnumType.STRING)
+    private PropertyTypeEnum propertyType;
     private String nameOfSearch;
     private Double minPrice;
     private Double maxPrice;
-    private ListingTypeEnum listingTypeEnum;
+    @Enumerated(EnumType.STRING)
+    private ListingTypeEnum listingType;
     private String location;
     private Integer numOfBedrooms;
     private Integer numOfBathrooms;
@@ -29,9 +32,6 @@ public class SearchCondition {
     void prePersist(){
         if(minPrice == null){
             minPrice = 0.0;
-        }
-        if(listingTypeEnum == null){
-            listingTypeEnum = ListingTypeEnum.FOR_SALE;
         }
         if(nameOfSearch == null){
             if(location != null){

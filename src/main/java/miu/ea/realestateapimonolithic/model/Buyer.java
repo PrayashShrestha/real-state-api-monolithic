@@ -17,8 +17,8 @@ public class Buyer extends User {
     @OneToMany
     @JoinTable(
             name = "favorite_properties",
-            joinColumns = @JoinColumn(name = "buyer-id"),
-            inverseJoinColumns = @JoinColumn(name = "property-id")
+            joinColumns = @JoinColumn(name = "buyer_id"),
+            inverseJoinColumns = @JoinColumn(name = "property_id")
     )
     private List<Property> favouriteProperties;
 

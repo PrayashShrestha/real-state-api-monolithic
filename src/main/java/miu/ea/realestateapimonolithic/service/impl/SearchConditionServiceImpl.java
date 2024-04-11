@@ -10,6 +10,7 @@ import miu.ea.realestateapimonolithic.model.SearchCondition;
 import miu.ea.realestateapimonolithic.repository.BuyerRepository;
 import miu.ea.realestateapimonolithic.repository.SearchConditionRepository;
 import miu.ea.realestateapimonolithic.service.SearchConditionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,13 @@ import java.util.stream.Collectors;
 public class SearchConditionServiceImpl implements SearchConditionService {
     private final SearchConditionRepository searchConditionRepository;
     private final BuyerRepository buyerRepository;
+
     @Override
     public void saveSearchCondition(Long buyerId, SearchConditionDto searchConditionDto) {
         Buyer buyer = buyerRepository.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
-        SearchCondition searchCondition = SearchConditionMapper.MAPPER.mapToSearchCondition(searchConditionDto);
+//        SearchCondition searchCondition = SearchConditionMapper.MAPPER.mapToSearchCondition(searchConditionDto);
+        SearchCondition searchCondition = new SearchCondition();
+        BeanUtils.copyProperties(searchConditionDto, searchCondition);
         searchCondition.setBuyer(buyer);
         searchConditionRepository.save(searchCondition);
 
@@ -37,7 +41,8 @@ public class SearchConditionServiceImpl implements SearchConditionService {
             searchCondition.setLocation(updatedSearchCondition.getLocation());
             searchCondition.setMinPrice(updatedSearchCondition.getMinPrice());
             searchCondition.setMaxPrice(updatedSearchCondition.getMaxPrice());
-            searchCondition.setListingTypeEnum(updatedSearchCondition.getListingTypeEnum());
+            searchCondition.setListingType(updatedSearchCondition.getListingType());
+            searchCondition.setPropertyType(updatedSearchCondition.getPropertyType());
             searchConditionRepository.save(searchCondition);
         }else {
             throw new NotAuthorizedException("Not Authorized to edit this condition " + buyerId);
@@ -49,7 +54,7 @@ public class SearchConditionServiceImpl implements SearchConditionService {
     public List<SearchConditionDto> getAllSearchCondition(Long buyerId) {
         return searchConditionRepository.getSearchConditionByBuyerId(buyerId)
                 .stream()
-                .map(SearchConditionMapper.MAPPER::mapToSearchConditionDto)
+                .map(SearchConditionMapper::toDto)
                 .collect(Collectors.toList());
     }
 

@@ -2,6 +2,7 @@ package miu.ea.realestateapimonolithic.dto;
 
 import lombok.*;
 import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
+import miu.ea.realestateapimonolithic.common.PropertyTypeEnum;
 
 @Builder
 @Setter
@@ -9,13 +10,12 @@ import miu.ea.realestateapimonolithic.common.ListingTypeEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchConditionDto {
-
     private Long id;
-
+    private PropertyTypeEnum propertyType;
     private String nameOfSearch;
     private Double minPrice;
     private Double maxPrice;
-    private ListingTypeEnum listingTypeEnum;
+    private ListingTypeEnum listingType;
     private String location;
     private Integer numOfBedrooms;
     private Integer numOfBathrooms;

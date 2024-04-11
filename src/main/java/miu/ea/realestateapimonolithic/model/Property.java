@@ -44,15 +44,9 @@ public class Property {
     private LocalDateTime listingDate;
     private LocalDateTime expiredDate;
 
-    private boolean deleted = Boolean.FALSE;
-
     @Fetch(FetchMode.JOIN)
     @ManyToOne
     private User user;
-
-
-
-
 
     public void addPropertyPhoto(PropertyPhoto propertyPhoto){
         photos = new ArrayList<>();
