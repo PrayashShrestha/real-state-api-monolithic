@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mysql-realstate:
+    container_name: mysql-realstate
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: spring-realstate
+      MYSQL_USER: spring-realstate
+      MYSQL_PASSWORD: spring-realstate
+      MYSQL_DATABASE: real-estate
+    command: --pid-file /var/lib/mysql/mysqld.pid
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - real-state-server
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db:/var/lib/mysql
+
+  realstate-server:
+    container_name: backend-server
+    image: real-state
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - real-state-server
+    depends_on:
+      - mysql-realstate
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-realstate:3306/real-estate
+      SPRING_DATASOURCE_USERNAME: spring-realstate
+      SPRING_DATASOURCE_PASSWORD: spring-realstate
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_DATASOURCE_INITIALIZATION_MODE: always
+networks:
+  real-state-server:
+    driver: bridge
+volumes:
+  db:
+    driver: local
